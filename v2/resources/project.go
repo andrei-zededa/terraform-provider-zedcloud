@@ -5,6 +5,7 @@ import (
 	"errors"
 	"log"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	api_client "github.com/zededa/terraform-provider-zedcloud/v2/client"
@@ -37,11 +38,15 @@ func CreateProject(ctx context.Context, d *schema.ResourceData, m interface{}) d
 	params := project.CreateParams()
 	params.SetBody(model)
 
+	log.Printf("[TRACE] project create model: %s", spew.Sdump(model))
+	log.Printf("[TRACE] project create params: %s", spew.Sdump(params))
+
 	client := m.(*api_client.ZedcloudAPI)
 
 	resp, err := client.Project.Create(params, nil)
-	log.Printf("[TRACE] response: %v", resp)
+	log.Printf("[TRACE] project create response: %s", spew.Sdump(resp))
 	if err != nil {
+		log.Printf("[TRACE] project create error: %s", spew.Sdump(err))
 		diags = append(diags, diag.Errorf("unexpected: %s", err)...)
 		return diags
 	}
@@ -172,10 +177,13 @@ func UpdateProject(ctx context.Context, d *schema.ResourceData, m interface{}) d
 		return diags
 	}
 
+	log.Printf("[TRACE] project update params: %s", spew.Sdump(params))
+
 	client := m.(*api_client.ZedcloudAPI)
 	resp, err := client.Project.Update(params, nil)
-	log.Printf("[TRACE] response: %v", resp)
+	log.Printf("[TRACE] project update response: %s", spew.Sdump(resp))
 	if err != nil {
+		log.Printf("[TRACE] project update error: %s", spew.Sdump(err))
 		return append(diags, diag.Errorf("unexpected: %s", err)...)
 	}
 

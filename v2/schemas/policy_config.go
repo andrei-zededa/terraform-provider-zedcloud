@@ -1,6 +1,9 @@
 package schemas
 
 import (
+	"log"
+
+	"github.com/davecgh/go-spew/spew"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/zededa/terraform-provider-zedcloud/v2/models"
 )
@@ -101,7 +104,7 @@ func PolicyConfigModel(d *schema.ResourceData) *models.Policy {
 		typeModel := typeInterface.(string)
 		typeVar = models.NewPolicyType(models.PolicyType(typeModel))
 	}
-	return &models.Policy{
+	x := &models.Policy{
 		AppPolicy:                  appPolicy,
 		AttestationPolicy:          attestationPolicy,
 		Attr:                       attr,
@@ -119,6 +122,8 @@ func PolicyConfigModel(d *schema.ResourceData) *models.Policy {
 		Title:                      &title, // string
 		Type:                       typeVar,
 	}
+	log.Printf("[TRACE] policy config model: %s", spew.Sdump(x))
+	return x
 }
 
 func PolicyConfigModelFromMap(m map[string]interface{}) *models.Policy {
@@ -226,7 +231,7 @@ func PolicyConfigModelFromMap(m map[string]interface{}) *models.Policy {
 		typeModel := typeInterface.(string)
 		typeVar = models.NewPolicyType(models.PolicyType(typeModel))
 	}
-	return &models.Policy{
+	x := &models.Policy{
 		AppPolicy:                  appPolicy,
 		AttestationPolicy:          attestationPolicy,
 		Attr:                       attr,
@@ -244,6 +249,8 @@ func PolicyConfigModelFromMap(m map[string]interface{}) *models.Policy {
 		Title:                      &title,
 		Type:                       typeVar,
 	}
+	log.Printf("[TRACE] policy config model from map: %s", spew.Sdump(x))
+	return x
 }
 
 func SetPolicyConfigResourceData(d *schema.ResourceData, m *models.Policy) {
@@ -299,7 +306,7 @@ func Policy() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
 		"app_policy": {
 			Description: `app policy, which is used in auto app instance deployment`,
-			Type:        schema.TypeList, //GoType: AppPolicy
+			Type:        schema.TypeList, // GoType: AppPolicy
 			Elem: &schema.Resource{
 				Schema: AppPolicy(),
 			},
@@ -308,7 +315,7 @@ func Policy() map[string]*schema.Schema {
 
 		"attestation_policy": {
 			Description: `attestation policy to enforce on all devices in this project`,
-			Type:        schema.TypeList, //GoType: AttestationPolicy
+			Type:        schema.TypeList, // GoType: AttestationPolicy
 			Elem: &schema.Resource{
 				Schema: AttestationPolicy(),
 			},
@@ -318,7 +325,7 @@ func Policy() map[string]*schema.Schema {
 
 		"attr": {
 			Description: `Mapping of policy  variable keys and policy variable values`,
-			Type:        schema.TypeMap, //GoType: map[string]string
+			Type:        schema.TypeMap, // GoType: map[string]string
 			Elem: &schema.Schema{
 				Type: schema.TypeString,
 			},
@@ -327,7 +334,7 @@ func Policy() map[string]*schema.Schema {
 
 		"azure_policy": {
 			Description: `azure policy, which is used in configuring azure iot-edge.`,
-			Type:        schema.TypeList, //GoType: AzurePolicy
+			Type:        schema.TypeList, // GoType: AzurePolicy
 			Elem: &schema.Resource{
 				Schema: AzurePolicy(),
 			},
@@ -336,7 +343,7 @@ func Policy() map[string]*schema.Schema {
 
 		"cluster_policy": {
 			Description: `cluster policy to bring up cluster on devices in this project`,
-			Type:        schema.TypeList, //GoType: ClusterPolicy
+			Type:        schema.TypeList, // GoType: ClusterPolicy
 			Elem: &schema.Resource{
 				Schema: ClusterPolicy(),
 			},
@@ -345,7 +352,7 @@ func Policy() map[string]*schema.Schema {
 
 		"configuration_lock_policy": {
 			Description: `configuration lock policy to enforce on all devices in this project`,
-			Type:        schema.TypeList, //GoType: ConfigurationLockPolicy
+			Type:        schema.TypeList, // GoType: ConfigurationLockPolicy
 			Elem: &schema.Resource{
 				Schema: ConfigurationLockPolicySchema(),
 			},
@@ -360,7 +367,7 @@ func Policy() map[string]*schema.Schema {
 
 		"edgeview_policy": {
 			Description: `edgeview policy on devices of this project`,
-			Type:        schema.TypeList, //GoType: EdgeviewPolicy
+			Type:        schema.TypeList, // GoType: EdgeviewPolicy
 			Elem: &schema.Resource{
 				Schema: EdgeviewPolicy(),
 			},
@@ -375,7 +382,7 @@ func Policy() map[string]*schema.Schema {
 
 		"local_operator_console_policy": {
 			Description: `local operator console policy to enforce on all devices in this project`,
-			Type:        schema.TypeList, //GoType: LocalOperatorConsolePolicy
+			Type:        schema.TypeList, // GoType: LocalOperatorConsolePolicy
 			Elem: &schema.Resource{
 				Schema: LocalOperatorConsolePolicy(),
 			},
@@ -384,7 +391,7 @@ func Policy() map[string]*schema.Schema {
 
 		"module_policy": {
 			Description: `module policy, which is used in auto module deployment`,
-			Type:        schema.TypeList, //GoType: ModulePolicy
+			Type:        schema.TypeList, // GoType: ModulePolicy
 			Elem: &schema.Resource{
 				Schema: ModulePolicy(),
 			},
@@ -400,7 +407,7 @@ func Policy() map[string]*schema.Schema {
 
 		"network_policy": {
 			Description: `network policy to enforce on all devices in this project`,
-			Type:        schema.TypeList, //GoType: NetworkPolicy
+			Type:        schema.TypeList, // GoType: NetworkPolicy
 			Elem: &schema.Resource{
 				Schema: NetworkPolicy(),
 			},
@@ -409,7 +416,7 @@ func Policy() map[string]*schema.Schema {
 
 		"revision": {
 			Description: `system defined info`,
-			Type:        schema.TypeList, //GoType: ObjectRevision
+			Type:        schema.TypeList, // GoType: ObjectRevision
 			Elem: &schema.Resource{
 				Schema: ObjectRevision(),
 			},

@@ -2,9 +2,11 @@ package resources
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"log"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	api_client "github.com/zededa/terraform-provider-zedcloud/v2/client"
@@ -45,9 +47,18 @@ func CreateNode(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 
 	client := m.(*api_client.ZedcloudAPI)
 
-	resp, err := client.Node.Create(params, nil)
-	log.Printf("[TRACE] response: %v", resp)
+	log.Printf("[TRACE] create node model: %s", spew.Sdump(model))
+	log.Printf("[TRACE] create node params: %s", spew.Sdump(params))
+	j, err := json.Marshal(params.Body)
 	if err != nil {
+		log.Printf("[TRACE] create node params body json marshal error: %s", spew.Sdump(err))
+	}
+	log.Printf("[TRACE] create node params body json: %s", string(j))
+
+	resp, err := client.Node.Create(params, nil)
+	log.Printf("[TRACE] create node response: %s", spew.Sdump(resp))
+	if err != nil {
+		log.Printf("[TRACE] create node error: %s", spew.Sdump(err))
 		diags = append(diags, diag.Errorf("unexpected: %s", err)...)
 		return diags
 	}
@@ -131,11 +142,14 @@ func UpdateNode(ctx context.Context, d *schema.ResourceData, m interface{}) diag
 	}
 	params.SetBody(zschema.NodeModel(d))
 
+	log.Printf("[TRACE] update node params: %s", spew.Sdump(params))
+
 	// makes a bulk update for all properties that were changed
 	client := m.(*api_client.ZedcloudAPI)
 	resp, err := client.Node.Update(params, nil)
-	log.Printf("[TRACE] response: %v", resp)
+	log.Printf("[TRACE] update node response: %s", spew.Sdump(resp))
 	if err != nil {
+		log.Printf("[TRACE] update node error: %s", spew.Sdump(err))
 		return append(diags, diag.Errorf("unexpected: %s", err)...)
 	}
 
@@ -388,7 +402,6 @@ func setBaseImage(
 	m interface{},
 	localImages, remoteImages []*models.BaseOSImage,
 ) diag.Diagnostics {
-
 	if len(localImages) == 0 {
 		return nil
 	}
@@ -439,7 +452,6 @@ func setAdminState(
 	m interface{},
 	localAdminState, remoteAdminState *models.AdminState,
 ) diag.Diagnostics {
-
 	// no config
 	if localAdminState == nil {
 		return nil

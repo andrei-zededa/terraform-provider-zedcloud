@@ -14,9 +14,22 @@ func TagLevelSettingsModel(d *schema.ResourceData) *models.TagLevelSettings {
 	}
 	var interfaceOrdering *models.InterfaceOrdering // InterfaceOrdering
 	interfaceOrderingInterface, interfaceOrderingIsSet := d.GetOk("interface_ordering")
+	// TODO: It seems that GetOk returns `interfaceOrderingIsSet == true`
+	// even if `interface_ordering` is not actually present in the config,
+	// check with something like:
+	//	log.Printf("[TRACE] project interface ordering debug: %s", spew.Sdump(interfaceOrdering))
+	//	log.Printf("[TRACE] project interface ordering debug: %s", spew.Sdump(interfaceOrderingIsSet))
+	//	log.Printf("[TRACE] project interface ordering debug: %s", spew.Sdump(interfaceOrderingInterface))
 	if interfaceOrderingIsSet {
 		interfaceOrderingModel := interfaceOrderingInterface.(string)
-		interfaceOrdering = models.NewInterfaceOrdering(models.InterfaceOrdering(interfaceOrderingModel))
+		// TODO: If we set `interfaceOrdering` here, even if it's an
+		// empty string because it's not actually part of the config it
+		// will cause errors with older versions of Zedcloud which do
+		// not support it. If we don't set it then it will remain `nil`
+		// and won't be sent due to `omitempty`.
+		if len(interfaceOrderingModel) > 0 {
+			interfaceOrdering = models.NewInterfaceOrdering(models.InterfaceOrdering(interfaceOrderingModel))
+		}
 	}
 	return &models.TagLevelSettings{
 		FlowLogTransmission: flowLogTransmission,
@@ -33,9 +46,17 @@ func TagLevelSettingsModelFromMap(m map[string]interface{}) *models.TagLevelSett
 	}
 	var interfaceOrdering *models.InterfaceOrdering // InterfaceOrdering
 	interfaceOrderingInterface, interfaceOrderingIsSet := m["interface_ordering"]
+	// TODO: Not tested if here we have a similar problem with `interfaceOrderingIsSet == true`
+	// when it's not actually part of the config like for `GetOk` above.
 	if interfaceOrderingIsSet {
 		interfaceOrderingModel := interfaceOrderingInterface.(string)
-		interfaceOrdering = models.NewInterfaceOrdering(models.InterfaceOrdering(interfaceOrderingModel))
+		// TODO: If we set `interfaceOrdering` here, even if it's an
+		// empty string it will cause errors with older versions of
+		// Zedcloud which do not support it. If we don't set it then it
+		// will remain `nil` and won't be sent due to `omitempty`.
+		if len(interfaceOrderingModel) > 0 {
+			interfaceOrdering = models.NewInterfaceOrdering(models.InterfaceOrdering(interfaceOrderingModel))
+		}
 	}
 	return &models.TagLevelSettings{
 		FlowLogTransmission: flowLogTransmission,

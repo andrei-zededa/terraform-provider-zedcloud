@@ -381,15 +381,26 @@ func VMManifest() map[string]*schema.Schema {
 			Required: true,
 		},
 
+		// TODO: Right now if `app_type` is not specified in the config
+		// it's sent as an empty string. This causes an error on the
+		// Zedcloud side as the empty string is not an allowed value
+		// for this "enum". We should either make `app_type` required
+		// or set it at a default value of `APP_TYPE_UNSPECIFIED` if
+		// not explictly configured.
+		//
+		// Also in the generated TF docs it's confusing that the example
+		// values are `vm, container, module` because if the user tries
+		// one of those values they will get an error. The correct values
+		// are: "APP_TYPE_UNSPECIFIED","APP_TYPE_VM","APP_TYPE_VM_RUNTIME","APP_TYPE_CONTAINER","APP_TYPE_MODULE".
 		"app_type": {
-			Description: `bundle type, eg: vm, container, module`,
+			Description: `App (bundle) type, e.g.: APP_TYPE_VM, APP_TYPE_CONTAINER, APP_TYPE_MODULE.`,
 			Type:        schema.TypeString,
 			Optional:    true,
 		},
 
 		"configuration": {
 			Description: `Template for Custom Configuration. Used for Cloud-Init`,
-			Type:        schema.TypeList, //GoType: UserDataTemplate
+			Type:        schema.TypeList, // GoType: UserDataTemplate
 			Elem: &schema.Resource{
 				Schema: UserTemplate(),
 			},
@@ -398,7 +409,7 @@ func VMManifest() map[string]*schema.Schema {
 
 		"container_detail": {
 			Description: `Create options direct the creation of the Docker container`,
-			Type:        schema.TypeList, //GoType: ContainerDetail
+			Type:        schema.TypeList, // GoType: ContainerDetail
 			Elem: &schema.Resource{
 				Schema: ContainerDetail(),
 			},
@@ -411,15 +422,26 @@ func VMManifest() map[string]*schema.Schema {
 			Optional:    true,
 		},
 
+		// TODO: Right now if `deployment_type` is not specified in the
+		// config it's sent as an empty string. This causes an error
+		// on the Zedcloud side as the empty string is not an allowed
+		// value for this "enum". We should either make `deployment_type`
+		// required or set it at a default value of `DEPLOYMENT_TYPE_UNSPECIFIED`
+		// if not explictly configured.
+		//
+		// Also in the generated TF docs it's confusing that the example
+		// values are `azure, k3s, standalone` because if the user tries
+		// one of those values they will get an error. The correct values
+		// are: "DEPLOYMENT_TYPE_UNSPECIFIED","DEPLOYMENT_TYPE_STAND_ALONE","DEPLOYMENT_TYPE_AZURE","DEPLOYMENT_TYPE_K3S","DEPLOYMENT_TYPE_AWS","DEPLOYMENT_TYPE_K3S_AZURE","DEPLOYMENT_TYPE_K3S_AWS","DEPLOYMENT_TYPE_VMWARE_VCE".
 		"deployment_type": {
-			Description: `type of deployment for the app, eg: azure, k3s, standalone`,
+			Description: `Deployment type for the app, e.g.: DEPLOYMENT_TYPE_STAND_ALONE, DEPLOYMENT_TYPE_AZURE, DEPLOYMENT_TYPE_K3S, etc.`,
 			Type:        schema.TypeString,
 			Optional:    true,
 		},
 
 		"desc": {
 			Description: `Description of the application`,
-			Type:        schema.TypeList, //GoType: Details
+			Type:        schema.TypeList, // GoType: Details
 			Elem: &schema.Resource{
 				Schema: Details(),
 			},
@@ -447,7 +469,7 @@ func VMManifest() map[string]*schema.Schema {
 
 		"images": {
 			Description: `UI map: AppEditPage:DrivesPane, AppDetailsPage:DrivesPane`,
-			Type:        schema.TypeList, //GoType: []*VMManifestImage
+			Type:        schema.TypeList, // GoType: []*VMManifestImage
 			Elem: &schema.Resource{
 				Schema: VMManifestImage(),
 			},
@@ -457,7 +479,7 @@ func VMManifest() map[string]*schema.Schema {
 
 		"interfaces": {
 			Description: `UI map: AppEditPage:EnvironmentsPane, AppDetailsPage:EnvironmentsPane`,
-			Type:        schema.TypeList, //GoType: []*Interface
+			Type:        schema.TypeList, // GoType: []*Interface
 			Elem: &schema.Resource{
 				Schema: Interface(),
 			},
@@ -467,7 +489,7 @@ func VMManifest() map[string]*schema.Schema {
 
 		"module": {
 			Description: `Azure module specific details like module twin, environment variable, routes`,
-			Type:        schema.TypeList, //GoType: ModuleDetail
+			Type:        schema.TypeList, // GoType: ModuleDetail
 			Elem: &schema.Resource{
 				Schema: ModuleDetail(),
 			},
@@ -482,7 +504,7 @@ func VMManifest() map[string]*schema.Schema {
 
 		"owner": {
 			Description: `Owner of the application`,
-			Type:        schema.TypeList, //GoType: Author
+			Type:        schema.TypeList, // GoType: Author
 			Elem: &schema.Resource{
 				Schema: Author(),
 			},
@@ -491,7 +513,7 @@ func VMManifest() map[string]*schema.Schema {
 
 		"permissions": {
 			Description: ``,
-			Type:        schema.TypeList, //GoType: []Permission
+			Type:        schema.TypeList, // GoType: []Permission
 			Elem: &schema.Resource{
 				Schema: Permission(),
 			},
@@ -500,7 +522,7 @@ func VMManifest() map[string]*schema.Schema {
 
 		"resources": {
 			Description: `UI map: AppEditPage:ResourcesPane, AppDetailsPage:ResourcesPane`,
-			Type:        schema.TypeList, //GoType: []*Resource
+			Type:        schema.TypeList, // GoType: []*Resource
 			Elem: &schema.Resource{
 				Schema: Resource(),
 			},

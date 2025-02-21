@@ -48,6 +48,14 @@ func ImageModel(d *schema.ResourceData) *models.Image {
 			projectAccessList = append(projectAccessList, v.(string))
 		}
 	}
+	var revision *models.ObjectRevision // ObjectRevision
+	revisionInterface, revisionIsSet := d.GetOk("revision")
+	if revisionIsSet && revisionInterface != nil {
+		revisionMap := revisionInterface.([]interface{})
+		if len(revisionMap) > 0 {
+			revision = ObjectRevisionModelFromMap(revisionMap[0].(map[string]interface{}))
+		}
+	}
 	title, _ := d.Get("title").(string)
 	return &models.Image{
 		DatastoreID:       &datastoreID, // string true false false
@@ -62,6 +70,7 @@ func ImageModel(d *schema.ResourceData) *models.Image {
 		ImageVersion:      imageVersion,
 		Name:              &name, // string true false false
 		ProjectAccessList: projectAccessList,
+		Revision:          revision,
 		Title:             &title, // string true false false
 	}
 }
@@ -109,6 +118,14 @@ func ImageModelFromMap(m map[string]interface{}) *models.Image {
 			projectAccessList = append(projectAccessList, v.(string))
 		}
 	}
+	var revision *models.ObjectRevision // ObjectRevision
+	revisionInterface, revisionIsSet := m["revision"]
+	if revisionIsSet && revisionInterface != nil {
+		revisionMap := revisionInterface.([]interface{})
+		if len(revisionMap) > 0 {
+			revision = ObjectRevisionModelFromMap(revisionMap[0].(map[string]interface{}))
+		}
+	}
 	title := m["title"].(string)
 	return &models.Image{
 		DatastoreID:       &datastoreID,
@@ -123,6 +140,7 @@ func ImageModelFromMap(m map[string]interface{}) *models.Image {
 		ImageVersion:      imageVersion,
 		Name:              &name,
 		ProjectAccessList: projectAccessList,
+		Revision:          revision,
 		Title:             &title,
 	}
 }
@@ -272,7 +290,7 @@ func Image() map[string]*schema.Schema {
 
 		"project_access_list": {
 			Description: `project access list of the image`,
-			Type:        schema.TypeList, //GoType: []string
+			Type:        schema.TypeList, // GoType: []string
 			Elem: &schema.Schema{
 				Type: schema.TypeString,
 			},
@@ -281,7 +299,7 @@ func Image() map[string]*schema.Schema {
 
 		"revision": {
 			Description: `system defined info`,
-			Type:        schema.TypeList, //GoType: ObjectRevision
+			Type:        schema.TypeList, // GoType: ObjectRevision
 			Elem: &schema.Resource{
 				Schema: ObjectRevision(),
 			},

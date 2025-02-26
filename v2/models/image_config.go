@@ -27,6 +27,9 @@ type Image struct {
 	// Pattern: [a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}
 	DatastoreID *string `json:"datastoreId"`
 
+	// datastore Id list where image binary is located.
+	DatastoreIDList []string `json:"datastoreIdList"`
+
 	// Detailed description of the image.
 	// Max Length: 256
 	Description string `json:"description,omitempty"`
@@ -71,6 +74,9 @@ type Image struct {
 
 	// system defined info
 	ImageVersion string `json:"imageVersion,omitempty"`
+
+	// flag to indicate eve image is LTS or not
+	IsLTS bool `json:"isLTS,omitempty"`
 
 	// User defined name of the image, unique across the enterprise. Once image is created, name can’t be changed.
 	// Required: true

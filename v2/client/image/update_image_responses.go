@@ -142,7 +142,6 @@ func (o *ImageConfigurationUpdateImageOK) GetPayload() *models.ZsrvResponse {
 }
 
 func (o *ImageConfigurationUpdateImageOK) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
 	o.Payload = new(models.ZsrvResponse)
 
 	// response payload
@@ -210,7 +209,6 @@ func (o *ImageConfigurationUpdateImageBadRequest) GetPayload() *models.ZsrvRespo
 }
 
 func (o *ImageConfigurationUpdateImageBadRequest) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
 	o.Payload = new(models.ZsrvResponse)
 
 	// response payload
@@ -278,7 +276,6 @@ func (o *ImageConfigurationUpdateImageUnauthorized) GetPayload() *models.ZsrvRes
 }
 
 func (o *ImageConfigurationUpdateImageUnauthorized) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
 	o.Payload = new(models.ZsrvResponse)
 
 	// response payload
@@ -346,7 +343,6 @@ func (o *ImageConfigurationUpdateImageForbidden) GetPayload() *models.ZsrvRespon
 }
 
 func (o *ImageConfigurationUpdateImageForbidden) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
 	o.Payload = new(models.ZsrvResponse)
 
 	// response payload
@@ -414,7 +410,6 @@ func (o *ImageConfigurationUpdateImageNotFound) GetPayload() *models.ZsrvRespons
 }
 
 func (o *ImageConfigurationUpdateImageNotFound) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
 	o.Payload = new(models.ZsrvResponse)
 
 	// response payload
@@ -482,7 +477,6 @@ func (o *ImageConfigurationUpdateImageConflict) GetPayload() *models.ZsrvRespons
 }
 
 func (o *ImageConfigurationUpdateImageConflict) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
 	o.Payload = new(models.ZsrvResponse)
 
 	// response payload
@@ -550,7 +544,6 @@ func (o *ImageConfigurationUpdateImageInternalServerError) GetPayload() *models.
 }
 
 func (o *ImageConfigurationUpdateImageInternalServerError) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
 	o.Payload = new(models.ZsrvResponse)
 
 	// response payload
@@ -618,7 +611,6 @@ func (o *ImageConfigurationUpdateImageGatewayTimeout) GetPayload() *models.ZsrvR
 }
 
 func (o *ImageConfigurationUpdateImageGatewayTimeout) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
 	o.Payload = new(models.ZsrvResponse)
 
 	// response payload
@@ -690,7 +682,6 @@ func (o *ImageConfigurationUpdateImageDefault) GetPayload() *models.GooglerpcSta
 }
 
 func (o *ImageConfigurationUpdateImageDefault) readResponse(response runtime.ClientResponse, consumer runtime.Consumer, formats strfmt.Registry) error {
-
 	o.Payload = new(models.GooglerpcStatus)
 
 	// response payload
@@ -709,11 +700,13 @@ ImageConfigurationUpdateImageBody Image metadata detail
 swagger:model ImageConfigurationUpdateImageBody
 */
 type ImageConfigurationUpdateImageBody struct {
-
 	// Datastore Id where image binary is located.
 	// Required: true
 	// Pattern: [a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}
 	DatastoreID *string `json:"datastoreId"`
+
+	// datastore Id list where image binary is located.
+	DatastoreIDList []string `json:"datastoreIdList"`
 
 	// Detailed description of the image.
 	// Max Length: 256
@@ -754,6 +747,9 @@ type ImageConfigurationUpdateImageBody struct {
 
 	// system defined info
 	ImageVersion string `json:"imageVersion,omitempty"`
+
+	// flag to indicate eve image is LTS or not
+	IsLTS bool `json:"isLTS,omitempty"`
 
 	// User defined name of the image, unique across the enterprise. Once image is created, name can’t be changed.
 	// Required: true
@@ -832,7 +828,6 @@ func (o *ImageConfigurationUpdateImageBody) Validate(formats strfmt.Registry) er
 }
 
 func (o *ImageConfigurationUpdateImageBody) validateDatastoreID(formats strfmt.Registry) error {
-
 	if err := validate.Required("body"+"."+"datastoreId", "body", o.DatastoreID); err != nil {
 		return err
 	}
@@ -857,7 +852,6 @@ func (o *ImageConfigurationUpdateImageBody) validateDescription(formats strfmt.R
 }
 
 func (o *ImageConfigurationUpdateImageBody) validateImageArch(formats strfmt.Registry) error {
-
 	if err := validate.Required("body"+"."+"imageArch", "body", o.ImageArch); err != nil {
 		return err
 	}
@@ -881,7 +875,6 @@ func (o *ImageConfigurationUpdateImageBody) validateImageArch(formats strfmt.Reg
 }
 
 func (o *ImageConfigurationUpdateImageBody) validateImageFormat(formats strfmt.Registry) error {
-
 	if err := validate.Required("body"+"."+"imageFormat", "body", o.ImageFormat); err != nil {
 		return err
 	}
@@ -924,7 +917,6 @@ func (o *ImageConfigurationUpdateImageBody) validateImageStatus(formats strfmt.R
 }
 
 func (o *ImageConfigurationUpdateImageBody) validateImageType(formats strfmt.Registry) error {
-
 	if err := validate.Required("body"+"."+"imageType", "body", o.ImageType); err != nil {
 		return err
 	}
@@ -948,7 +940,6 @@ func (o *ImageConfigurationUpdateImageBody) validateImageType(formats strfmt.Reg
 }
 
 func (o *ImageConfigurationUpdateImageBody) validateName(formats strfmt.Registry) error {
-
 	if err := validate.Required("body"+"."+"name", "body", o.Name); err != nil {
 		return err
 	}
@@ -1007,7 +998,6 @@ func (o *ImageConfigurationUpdateImageBody) validateRevision(formats strfmt.Regi
 }
 
 func (o *ImageConfigurationUpdateImageBody) validateTitle(formats strfmt.Registry) error {
-
 	if err := validate.Required("body"+"."+"title", "body", o.Title); err != nil {
 		return err
 	}
@@ -1070,7 +1060,6 @@ func (o *ImageConfigurationUpdateImageBody) ContextValidate(ctx context.Context,
 }
 
 func (o *ImageConfigurationUpdateImageBody) contextValidateImageArch(ctx context.Context, formats strfmt.Registry) error {
-
 	if o.ImageArch != nil {
 		if err := o.ImageArch.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
@@ -1086,7 +1075,6 @@ func (o *ImageConfigurationUpdateImageBody) contextValidateImageArch(ctx context
 }
 
 func (o *ImageConfigurationUpdateImageBody) contextValidateImageError(ctx context.Context, formats strfmt.Registry) error {
-
 	if err := validate.ReadOnly(ctx, "body"+"."+"imageError", "body", string(o.ImageError)); err != nil {
 		return err
 	}
@@ -1095,7 +1083,6 @@ func (o *ImageConfigurationUpdateImageBody) contextValidateImageError(ctx contex
 }
 
 func (o *ImageConfigurationUpdateImageBody) contextValidateImageFormat(ctx context.Context, formats strfmt.Registry) error {
-
 	if o.ImageFormat != nil {
 		if err := o.ImageFormat.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
@@ -1111,7 +1098,6 @@ func (o *ImageConfigurationUpdateImageBody) contextValidateImageFormat(ctx conte
 }
 
 func (o *ImageConfigurationUpdateImageBody) contextValidateImageLocal(ctx context.Context, formats strfmt.Registry) error {
-
 	if err := validate.ReadOnly(ctx, "body"+"."+"imageLocal", "body", string(o.ImageLocal)); err != nil {
 		return err
 	}
@@ -1120,7 +1106,6 @@ func (o *ImageConfigurationUpdateImageBody) contextValidateImageLocal(ctx contex
 }
 
 func (o *ImageConfigurationUpdateImageBody) contextValidateImageStatus(ctx context.Context, formats strfmt.Registry) error {
-
 	if o.ImageStatus != nil {
 		if err := o.ImageStatus.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
@@ -1136,7 +1121,6 @@ func (o *ImageConfigurationUpdateImageBody) contextValidateImageStatus(ctx conte
 }
 
 func (o *ImageConfigurationUpdateImageBody) contextValidateImageType(ctx context.Context, formats strfmt.Registry) error {
-
 	if o.ImageType != nil {
 		if err := o.ImageType.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
@@ -1152,7 +1136,6 @@ func (o *ImageConfigurationUpdateImageBody) contextValidateImageType(ctx context
 }
 
 func (o *ImageConfigurationUpdateImageBody) contextValidateOriginType(ctx context.Context, formats strfmt.Registry) error {
-
 	if o.OriginType != nil {
 		if err := o.OriginType.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
@@ -1168,7 +1151,6 @@ func (o *ImageConfigurationUpdateImageBody) contextValidateOriginType(ctx contex
 }
 
 func (o *ImageConfigurationUpdateImageBody) contextValidateRevision(ctx context.Context, formats strfmt.Registry) error {
-
 	if o.Revision != nil {
 		if err := o.Revision.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {

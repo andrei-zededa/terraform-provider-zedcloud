@@ -7,6 +7,22 @@ import (
 
 func ImageModel(d *schema.ResourceData) *models.Image {
 	datastoreID, _ := d.Get("datastore_id").(string)
+	var datastoreIDList []string
+	datastoreIDListInterface, datastoreIDListIsSet := d.GetOk("datastore_id_list")
+	if datastoreIDListIsSet {
+		var items []interface{}
+		if listItems, isList := datastoreIDListInterface.([]interface{}); isList {
+			items = listItems
+		} else {
+			items = datastoreIDListInterface.(*schema.Set).List()
+		}
+		for _, v := range items {
+			if v == nil {
+				continue
+			}
+			datastoreIDList = append(datastoreIDList, v.(string))
+		}
+	}
 	description, _ := d.Get("description").(string)
 	id, _ := d.Get("id").(string)
 	var imageArch *models.ModelArchType // ModelArchType
@@ -59,6 +75,7 @@ func ImageModel(d *schema.ResourceData) *models.Image {
 	title, _ := d.Get("title").(string)
 	return &models.Image{
 		DatastoreID:       &datastoreID, // string true false false
+		DatastoreIDList:   datastoreIDList,
 		Description:       description,
 		ID:                id,
 		ImageArch:         imageArch,
@@ -77,6 +94,22 @@ func ImageModel(d *schema.ResourceData) *models.Image {
 
 func ImageModelFromMap(m map[string]interface{}) *models.Image {
 	datastoreID := m["datastore_id"].(string)
+	var datastoreIDList []string
+	datastoreIDListInterface, datastoreIDListIsSet := m["project_access_list"]
+	if datastoreIDListIsSet {
+		var items []interface{}
+		if listItems, isList := datastoreIDListInterface.([]interface{}); isList {
+			items = listItems
+		} else {
+			items = datastoreIDListInterface.(*schema.Set).List()
+		}
+		for _, v := range items {
+			if v == nil {
+				continue
+			}
+			datastoreIDList = append(datastoreIDList, v.(string))
+		}
+	}
 	description := m["description"].(string)
 	id := m["id"].(string)
 	var imageArch *models.ModelArchType // ModelArchType
@@ -129,6 +162,7 @@ func ImageModelFromMap(m map[string]interface{}) *models.Image {
 	title := m["title"].(string)
 	return &models.Image{
 		DatastoreID:       &datastoreID,
+		DatastoreIDList:   datastoreIDList,
 		Description:       description,
 		ID:                id,
 		ImageArch:         imageArch,
@@ -147,6 +181,7 @@ func ImageModelFromMap(m map[string]interface{}) *models.Image {
 
 func SetImageResourceData(d *schema.ResourceData, m *models.Image) {
 	d.Set("datastore_id", m.DatastoreID)
+	d.Set("datastore_id_list", m.DatastoreIDList)
 	d.Set("description", m.Description)
 	d.Set("id", m.ID)
 	d.Set("image_arch", m.ImageArch)
@@ -171,6 +206,7 @@ func SetImageSubResourceData(m []*models.Image) (d []*map[string]interface{}) {
 		if ImageConfigModel != nil {
 			properties := make(map[string]interface{})
 			properties["datastore_id"] = ImageConfigModel.DatastoreID
+			properties["datastore_id_list"] = ImageConfigModel.DatastoreIDList
 			properties["description"] = ImageConfigModel.Description
 			properties["id"] = ImageConfigModel.ID
 			properties["image_arch"] = ImageConfigModel.ImageArch
@@ -201,6 +237,15 @@ func Image() map[string]*schema.Schema {
 			Description: `Datastore Id where image binary is located.`,
 			Type:        schema.TypeString,
 			Required:    true,
+		},
+
+		"datastore_id_list": {
+			Description: `List of datastore IDs where image binary is located.`,
+			Type:        schema.TypeList, // GoType: []string
+			Elem: &schema.Schema{
+				Type: schema.TypeString,
+			},
+			Optional: true,
 		},
 
 		"description": {
@@ -317,6 +362,7 @@ func Image() map[string]*schema.Schema {
 func GetImagePropertyFields() (t []string) {
 	return []string{
 		"datastore_id",
+		"datastore_id_list",
 		"description",
 		"id",
 		"image_arch",

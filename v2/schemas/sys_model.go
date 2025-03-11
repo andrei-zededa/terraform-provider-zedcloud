@@ -118,7 +118,7 @@ func SysModelModel(d *schema.ResourceData) *models.SysModel {
 		ParentDetail:  parentDetail,
 		ProductStatus: productStatus,
 		ProductURL:    productURL,
-		Revision:	   revision,
+		Revision:      revision,
 		State:         state,
 		Title:         &title, // string
 		Type:          typeVar,
@@ -241,7 +241,7 @@ func SysModelModelFromMap(m map[string]interface{}) *models.SysModel {
 		ParentDetail:  parentDetail,
 		ProductStatus: productStatus,
 		ProductURL:    productURL,
-		Revision:	   revision,
+		Revision:      revision,
 		State:         state,
 		Title:         &title,
 		Type:          typeVar,
@@ -299,7 +299,7 @@ func SysModelSchema() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
 		"p_c_r_templates": {
 			Description: `PCR templates keyed by EVE version`,
-			Type:        schema.TypeList, //GoType: []*PCRTemplate
+			Type:        schema.TypeList, // GoType: []*PCRTemplate
 			Elem: &schema.Resource{
 				Schema: PCRTemplateSchema(),
 			},
@@ -309,7 +309,7 @@ func SysModelSchema() map[string]*schema.Schema {
 
 		"attr": {
 			Description: `Map of <string, string> which defines attr`,
-			Type:        schema.TypeMap, //GoType: map[string]string
+			Type:        schema.TypeMap, // GoType: map[string]string
 			Elem: &schema.Schema{
 				Type: schema.TypeString,
 			},
@@ -336,13 +336,14 @@ func SysModelSchema() map[string]*schema.Schema {
 
 		"io_member_list": {
 			Description: `List of IoMembers`,
-			Type:        schema.TypeList, //GoType: []*IoMember
+			Type:        schema.TypeList, // GoType: []*IoMember
 			Elem: &schema.Resource{
 				Schema: IoMemberSchema(),
 			},
 			// ConfigMode: schema.SchemaConfigModeAttr,
-			Optional: true,
-			DiffSuppressFunc: diffSuppressIoMemberListOrder("io_member_list"),
+			Optional:              true,
+			DiffSuppressOnRefresh: true,
+			DiffSuppressFunc:      diffSuppressIoMemberListOrder("io_member_list"),
 		},
 
 		"is_imported": {
@@ -353,7 +354,7 @@ func SysModelSchema() map[string]*schema.Schema {
 
 		"logo": {
 			Description: `Map of <string, string> which holds the key:url for the logo artifact of the model`,
-			Type:        schema.TypeMap, //GoType: map[string]string
+			Type:        schema.TypeMap, // GoType: map[string]string
 			Elem: &schema.Schema{
 				Type: schema.TypeString,
 			},
@@ -374,11 +375,11 @@ func SysModelSchema() map[string]*schema.Schema {
 
 		"parent_detail": {
 			Description: `origin and parent related details`,
-			Type:        schema.TypeList, //GoType: ObjectParentDetail
+			Type:        schema.TypeList, // GoType: ObjectParentDetail
 			Elem: &schema.Resource{
 				Schema: ObjectParentDetail(),
 			},
-			Optional: true,
+			Optional:         true,
 			DiffSuppressFunc: supress(),
 		},
 
@@ -396,7 +397,7 @@ func SysModelSchema() map[string]*schema.Schema {
 
 		"revision": {
 			Description: `Object Revision  of the model`,
-			Type:        schema.TypeList, //GoType: ObjectRevision
+			Type:        schema.TypeList, // GoType: ObjectRevision
 			Elem: &schema.Resource{
 				Schema: ObjectRevision(),
 			},

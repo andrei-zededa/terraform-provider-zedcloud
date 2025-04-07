@@ -3,8 +3,9 @@ package resources
 import (
 	"context"
 	"errors"
-	"github.com/zededa/terraform-provider-zedcloud/v2/models"
 	"log"
+
+	"github.com/zededa/terraform-provider-zedcloud/v2/models"
 
 	"github.com/davecgh/go-spew/spew"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -30,7 +31,8 @@ func RoleResource() *schema.Resource {
 
 func RoleDataSource() *schema.Resource {
 	return &schema.Resource{
-		Schema: zschema.RoleSchema(),
+		ReadContext: IdentityAccessManagement_GetRole,
+		Schema:      zschema.RoleSchema(),
 	}
 }
 

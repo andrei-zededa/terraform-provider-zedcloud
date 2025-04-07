@@ -3,9 +3,10 @@ package resources
 import (
 	"context"
 	"errors"
+	"log"
+
 	models "github.com/zededa/terraform-provider-zedcloud/v2/models"
 	zschema "github.com/zededa/terraform-provider-zedcloud/v2/schemas"
-	"log"
 
 	"github.com/davecgh/go-spew/spew"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -30,7 +31,8 @@ func UserResource() *schema.Resource {
 
 func UserDataSource() *schema.Resource {
 	return &schema.Resource{
-		Schema: zschema.DetailedUserSchema(),
+		ReadContext: IdentityAccessManagement_GetUser,
+		Schema:      zschema.DetailedUserSchema(),
 	}
 }
 

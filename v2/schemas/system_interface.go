@@ -5,6 +5,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/zededa/terraform-provider-zedcloud/v2/models"
+	"golang.org/x/exp/slices"
 )
 
 func SystemInterfaceModel(d *schema.ResourceData) *models.SystemInterface {
@@ -31,15 +32,27 @@ func SystemInterfaceModel(d *schema.ResourceData) *models.SystemInterface {
 			tags[k] = v.(string)
 		}
 	}
+	sharedLabels := []string{}
+	sharedLabelsInterface, sharedLabelsIsSet := d.GetOk("shared_labels")
+	if sharedLabelsIsSet {
+		list := sharedLabelsInterface.([]interface{})
+		for _, x := range list {
+			if x == nil {
+				continue
+			}
+			sharedLabels = append(sharedLabels, x.(string))
+		}
+	}
 
 	return &models.SystemInterface{
-		Cost:      cost,
-		IntfUsage: intfUsage,
-		Intfname:  intfname,
-		Ipaddr:    ipaddr,
-		Macaddr:   macaddr,
-		Netname:   netname,
-		Tags:      tags,
+		Cost:         cost,
+		IntfUsage:    intfUsage,
+		Intfname:     intfname,
+		Ipaddr:       ipaddr,
+		Macaddr:      macaddr,
+		Netname:      netname,
+		Tags:         tags,
+		SharedLabels: sharedLabels,
 	}
 }
 
@@ -61,14 +74,27 @@ func SystemInterfaceModelFromMap(m map[string]interface{}) *models.SystemInterfa
 			tags[k] = v.(string)
 		}
 	}
+	sharedLabels := []string{}
+	sharedLabelsInterface, sharedLabelsIsSet := m["shared_labels"]
+	if sharedLabelsIsSet {
+		list := sharedLabelsInterface.([]interface{})
+		for _, x := range list {
+			if x == nil {
+				continue
+			}
+			sharedLabels = append(sharedLabels, x.(string))
+		}
+	}
+
 	return &models.SystemInterface{
-		Cost:      cost,
-		IntfUsage: models.NewAdapterUsage(models.AdapterUsage(intfUsage)),
-		Intfname:  intfname,
-		Ipaddr:    ipaddr,
-		Macaddr:   macaddr,
-		Netname:   netname,
-		Tags:      tags,
+		Cost:         cost,
+		IntfUsage:    models.NewAdapterUsage(models.AdapterUsage(intfUsage)),
+		Intfname:     intfname,
+		Ipaddr:       ipaddr,
+		Macaddr:      macaddr,
+		Netname:      netname,
+		Tags:         tags,
+		SharedLabels: sharedLabels,
 	}
 }
 
@@ -80,6 +106,7 @@ func SetSysInterfaceResourceData(d *schema.ResourceData, m *models.SystemInterfa
 	d.Set("macaddr", m.Macaddr)
 	d.Set("netname", m.Netname)
 	d.Set("tags", m.Tags)
+	d.Set("shared_labels", m.SharedLabels)
 }
 
 func SetSysInterfaceSubResourceData(m []*models.SystemInterface) (d []*map[string]interface{}) {
@@ -93,6 +120,7 @@ func SetSysInterfaceSubResourceData(m []*models.SystemInterface) (d []*map[strin
 			properties["macaddr"] = SysInterfaceModel.Macaddr
 			properties["netname"] = SysInterfaceModel.Netname
 			properties["tags"] = SysInterfaceModel.Tags
+			properties["shared_labels"] = SysInterfaceModel.SharedLabels
 			d = append(d, &properties)
 		}
 	}
@@ -140,7 +168,16 @@ func SystemInterface() map[string]*schema.Schema {
 
 		"tags": {
 			Description: `Tags are name/value pairs that enable you to categorize resources. Tag names are case insensitive with max_length 512 and min_length 3. Tag values are case sensitive with max_length 256 and min_length 3.`,
-			Type:        schema.TypeMap, //GoType: map[string]string
+			Type:        schema.TypeMap, // GoType: map[string]string
+			Elem: &schema.Schema{
+				Type: schema.TypeString,
+			},
+			Optional: true,
+		},
+
+		"shared_labels": {
+			Description: `Shared labels are a set of user-defined shared labels attached to the adapter`,
+			Type:        schema.TypeList, // GoType: []string
 			Elem: &schema.Schema{
 				Type: schema.TypeString,
 			},
@@ -159,7 +196,29 @@ func GetSysInterfacePropertyFields() (t []string) {
 		"macaddr",
 		"netname",
 		"tags",
+		"shared_labels",
 	}
+}
+
+// CompareSharedLabels compares 2 lists of strings for element equality when
+// the order or the elements in the lists doesn't matter.
+//
+// NOTE: that the 2 lists are sorted for this comparison therefore it is
+// changing the input arguments in-place.
+func CompareSharedLabels(a, b []string) bool {
+	if len(a) != len(b) {
+		return false
+	}
+
+	slices.Sort(a)
+	slices.Sort(b)
+	for i, x := range a {
+		if x != b[i] {
+			return false
+		}
+	}
+
+	return true
 }
 
 func CompareSystemInterfaceList(a, b []*models.SystemInterface) bool {
@@ -196,6 +255,9 @@ func CompareSystemInterfaceList(a, b []*models.SystemInterface) bool {
 				continue
 			}
 			if !reflect.DeepEqual(oldList.Tags, newList.Tags) {
+				continue
+			}
+			if !CompareSharedLabels(oldList.SharedLabels, newList.SharedLabels) {
 				continue
 			}
 			found = true
@@ -236,6 +298,9 @@ func CompareSystemInterfaceList(a, b []*models.SystemInterface) bool {
 				continue
 			}
 			if !reflect.DeepEqual(oldList.Tags, newList.Tags) {
+				continue
+			}
+			if !CompareSharedLabels(oldList.SharedLabels, newList.SharedLabels) {
 				continue
 			}
 			found = true

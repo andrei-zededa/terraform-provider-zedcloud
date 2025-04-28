@@ -121,6 +121,10 @@ resource "zedcloud_edgenode" "test_tf_provider" {
 			"system_interface_1_key" = "system_interface_1_value"
 			"system_interface_2_key" = "system_interface_2_value"
 		}
+    shared_labels = [
+      "group_1"
+      "red_adapter_label"
+    ]
 	}
 	interfaces {
 		intfname = "eth0"

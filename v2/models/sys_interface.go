@@ -42,6 +42,9 @@ type SystemInterface struct {
 
 	// Tags are name/value pairs that enable you to categorize resources. Tag names are case insensitive with max_length 512 and min_length 3. Tag values are case sensitive with max_length 256 and min_length 3.
 	Tags map[string]string `json:"tags,omitempty"`
+
+	// SharedLabels are a set of user-defined shared labels attached to the adapter.
+	SharedLabels []string `json:"sharedLabels,omitempty"`
 }
 
 // Validate validates this sys interface

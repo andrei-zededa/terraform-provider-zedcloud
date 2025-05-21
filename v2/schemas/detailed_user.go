@@ -30,7 +30,7 @@ func DetailedUserModel(d *schema.ResourceData) *models.DetailedUser {
 		}
 	}
 	customUserInput := map[string]string{}
-	customUserInputInterface, customUserInputIsSet := d.GetOk("customUserInput")
+	customUserInputInterface, customUserInputIsSet := d.GetOk("custom_user_input")
 	if customUserInputIsSet {
 		customUserInputMap := customUserInputInterface.(map[string]interface{})
 		for k, v := range customUserInputMap {
@@ -217,18 +217,18 @@ func DetailedUserSchema() map[string]*schema.Schema {
 		},
 
 		"last_login_time": {
-			Description:  `Last login time of the user`,
-			Type:         schema.TypeString,
-			ValidateFunc: validation.IsRFC3339Time,
-			Optional:     true,
+			Description:      `Last login time of the user`,
+			Type:             schema.TypeString,
+			ValidateFunc:     validation.IsRFC3339Time,
+			Optional:         true,
 			DiffSuppressFunc: supress(),
 		},
 
 		"last_logout_time": {
-			Description:  `Last logout time of the user`,
-			Type:         schema.TypeString,
-			ValidateFunc: validation.IsRFC3339Time,
-			Optional:     true,
+			Description:      `Last logout time of the user`,
+			Type:             schema.TypeString,
+			ValidateFunc:     validation.IsRFC3339Time,
+			Optional:         true,
 			DiffSuppressFunc: supress(),
 		},
 
@@ -240,18 +240,18 @@ func DetailedUserSchema() map[string]*schema.Schema {
 
 		"allowed_enterprises": {
 			Description: `Permitted list of enterprises with their associated roles`,
-			Type:        schema.TypeList, //GoType: []*AllowedEnterprise
+			Type:        schema.TypeList, // GoType: []*AllowedEnterprise
 			Elem: &schema.Resource{
 				Schema: AllowedEnterpriseSchema(),
 			},
 			// ConfigMode: schema.SchemaConfigModeAttr,
-			Optional: true,
+			Optional:         true,
 			DiffSuppressFunc: diffSuppressChangedList("allowed_enterprises"),
 		},
 
 		"custom_user_input": {
 			Description: `Custom user parameters`,
-			Type:        schema.TypeMap, //GoType: map[string]string
+			Type:        schema.TypeMap, // GoType: map[string]string
 			Elem: &schema.Schema{
 				Type: schema.TypeString,
 			},
@@ -320,7 +320,7 @@ func DetailedUserSchema() map[string]*schema.Schema {
 
 		"revision": {
 			Description: `system defined info`,
-			Type:        schema.TypeList, //GoType: ObjectRevision
+			Type:        schema.TypeList, // GoType: ObjectRevision
 			Elem: &schema.Resource{
 				Schema: ObjectRevision(),
 			},

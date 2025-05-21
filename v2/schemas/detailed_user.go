@@ -49,6 +49,12 @@ func DetailedUserModel(d *schema.ResourceData) *models.DetailedUser {
 	notifyPref, _ := d.Get("notify_pref").(string)
 	phone, _ := d.Get("phone").(string)
 	roleID, _ := d.Get("role_id").(string)
+	var stateVar *models.UserState
+	stateInterface, stateIsSet := d.GetOk("state")
+	if stateIsSet {
+		stateStr := stateInterface.(string)
+		stateVar = models.NewUserState(models.UserState(stateStr))
+	}
 	timeZone, _ := d.Get("time_zone").(string)
 	var typeVar *models.AuthType // AuthType
 	typeInterface, typeIsSet := d.GetOk("type")
@@ -72,6 +78,7 @@ func DetailedUserModel(d *schema.ResourceData) *models.DetailedUser {
 		NotifyPref:         notifyPref,
 		Phone:              phone,
 		RoleID:             &roleID, // string
+		State:              stateVar,
 		TimeZone:           timeZone,
 		Type:               typeVar,
 		Username:           &username, // string
@@ -120,6 +127,12 @@ func DetailedUserModelFromMap(m map[string]interface{}) *models.DetailedUser {
 	notifyPref := m["notify_pref"].(string)
 	phone := m["phone"].(string)
 	roleID := m["role_id"].(string)
+	var stateVar *models.UserState
+	stateInterface, stateIsSet := m["state"]
+	if stateIsSet {
+		stateStr := stateInterface.(string)
+		stateVar = models.NewUserState(models.UserState(stateStr))
+	}
 	timeZone := m["time_zone"].(string)
 	var typeVar *models.AuthType // AuthType
 	typeInterface, typeIsSet := m["type"]
@@ -143,6 +156,7 @@ func DetailedUserModelFromMap(m map[string]interface{}) *models.DetailedUser {
 		NotifyPref:         notifyPref,
 		Phone:              phone,
 		RoleID:             &roleID,
+		State:              stateVar,
 		TimeZone:           timeZone,
 		Type:               typeVar,
 		Username:           &username,
@@ -381,6 +395,7 @@ func GetDetailedUserPropertyFields() (t []string) {
 		"notify_pref",
 		"phone",
 		"role_id",
+		"state",
 		"time_zone",
 		"type",
 		"username",

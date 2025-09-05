@@ -141,15 +141,15 @@ func ProviderConfigure(ctx context.Context, d *schema.ResourceData) (interface{}
 	if strings.HasPrefix(zedCloudURL, "https://") {
 		zedCloudURL = strings.TrimPrefix(zedCloudURL, "https://")
 	}
-	retryClient := getRetryClient()
-	transport := httptransport.NewWithClient(zedCloudURL, "/api", []string{"https"}, retryClient.StandardClient())
+	stdRetryClient := getRetryClient().StandardClient()
+	stdRetryClient.Transport = NewHttpTransportWrapper(stdRetryClient.Transport)
+	transport := httptransport.NewWithClient(zedCloudURL, "/api", []string{"https"}, stdRetryClient)
 	httpSessionDebugEnabled := envVarIsEnabled("TF_HTTP_SESSION_DEBUG")
 	if httpSessionDebugEnabled {
 		transport.SetDebug(true)
 		transport.SetLogger(HTLogger{})
 	}
 	transport.DefaultAuthentication = BearerToken(token)
-	transport.Transport = NewHttpTransportWrapper(transport.Transport)
 
 	return client.New(transport, strfmt.Default), nil
 }

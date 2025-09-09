@@ -20,7 +20,6 @@ import (
 //
 // swagger:model sysInterface
 type SystemInterface struct {
-
 	// cost of using this interface. Default is 0.
 	// Maximum: 255
 	Cost int64 `json:"cost,omitempty"`
@@ -42,6 +41,14 @@ type SystemInterface struct {
 
 	// Tags are name/value pairs that enable you to categorize resources. Tag names are case insensitive with max_length 512 and min_length 3. Tag values are case sensitive with max_length 256 and min_length 3.
 	Tags map[string]string `json:"tags,omitempty"`
+
+	// ZType is type of this IO adapter, like `IO_TYPE_ETH`, `IO_TYPE_USB`, etc.
+	//
+	// NOTE: Generally it is optional however certain configurations require it be
+	// set to a specific value. For example for network interfaces that we want to
+	// as use as `ADAPTER_USAGE_VLANS_ONLY` it is now mandatory for ZType to be
+	// set to `IO_TYPE_ETH`.
+	ZType string `json:"ztype,omitempty"`
 }
 
 // Validate validates this sys interface
@@ -108,7 +115,6 @@ func (m *SystemInterface) ContextValidate(ctx context.Context, formats strfmt.Re
 }
 
 func (m *SystemInterface) contextValidateIntfUsage(ctx context.Context, formats strfmt.Registry) error {
-
 	if m.IntfUsage != nil {
 		if err := m.IntfUsage.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {

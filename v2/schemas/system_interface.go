@@ -31,6 +31,7 @@ func SystemInterfaceModel(d *schema.ResourceData) *models.SystemInterface {
 			tags[k] = v.(string)
 		}
 	}
+	ztype, _ := d.Get("ztype").(string)
 
 	return &models.SystemInterface{
 		Cost:      cost,
@@ -40,6 +41,7 @@ func SystemInterfaceModel(d *schema.ResourceData) *models.SystemInterface {
 		Macaddr:   macaddr,
 		Netname:   netname,
 		Tags:      tags,
+		ZType:     ztype,
 	}
 }
 
@@ -61,6 +63,8 @@ func SystemInterfaceModelFromMap(m map[string]interface{}) *models.SystemInterfa
 			tags[k] = v.(string)
 		}
 	}
+	ztype := m["ztype"].(string)
+
 	return &models.SystemInterface{
 		Cost:      cost,
 		IntfUsage: models.NewAdapterUsage(models.AdapterUsage(intfUsage)),
@@ -69,6 +73,7 @@ func SystemInterfaceModelFromMap(m map[string]interface{}) *models.SystemInterfa
 		Macaddr:   macaddr,
 		Netname:   netname,
 		Tags:      tags,
+		ZType:     ztype,
 	}
 }
 
@@ -80,6 +85,7 @@ func SetSysInterfaceResourceData(d *schema.ResourceData, m *models.SystemInterfa
 	d.Set("macaddr", m.Macaddr)
 	d.Set("netname", m.Netname)
 	d.Set("tags", m.Tags)
+	d.Set("ztype", m.ZType)
 }
 
 func SetSysInterfaceSubResourceData(m []*models.SystemInterface) (d []*map[string]interface{}) {
@@ -93,6 +99,7 @@ func SetSysInterfaceSubResourceData(m []*models.SystemInterface) (d []*map[strin
 			properties["macaddr"] = SysInterfaceModel.Macaddr
 			properties["netname"] = SysInterfaceModel.Netname
 			properties["tags"] = SysInterfaceModel.Tags
+			properties["ztype"] = SysInterfaceModel.ZType
 			d = append(d, &properties)
 		}
 	}
@@ -140,10 +147,20 @@ func SystemInterface() map[string]*schema.Schema {
 
 		"tags": {
 			Description: `Tags are name/value pairs that enable you to categorize resources. Tag names are case insensitive with max_length 512 and min_length 3. Tag values are case sensitive with max_length 256 and min_length 3.`,
-			Type:        schema.TypeMap, //GoType: map[string]string
+			Type:        schema.TypeMap, // GoType: map[string]string
 			Elem: &schema.Schema{
 				Type: schema.TypeString,
 			},
+			Optional: true,
+		},
+
+		"ztype": {
+			Description: `ZType is type of this IO adapter, like 'IO_TYPE_ETH', 'IO_TYPE_USB', etc.` +
+				` Generally it is optional however certain configuration require it be` +
+				` set to a specific value. For example for network interfaces that we want to` +
+				` as use as 'ADAPTER_USAGE_VLANS_ONLY' it is now mandatory for ZType to be` +
+				` set to 'IO_TYPE_ETH'.`,
+			Type:     schema.TypeString,
 			Optional: true,
 		},
 	}
@@ -159,6 +176,7 @@ func GetSysInterfacePropertyFields() (t []string) {
 		"macaddr",
 		"netname",
 		"tags",
+		"ztype",
 	}
 }
 

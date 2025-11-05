@@ -18,7 +18,6 @@ import (
 //
 // swagger:model NetworkInstConfig
 type NetworkInstConfig struct {
-
 	// flag to indicate if this is default network
 	//
 	// flag to indicate if this is the default network instance for the device
@@ -53,6 +52,10 @@ type NetworkInstConfig struct {
 	//
 	// List of Static IP routes
 	StaticRoutes []*StaticIPRoute `json:"staticRoutes"`
+
+	// ForwardLLDP enables the forwarding of LLDP (link layer discovery protocol)
+	// between the ports of this network-instance.
+	ForwardLLDP bool `json:"forwardLldp"`
 
 	// Tags are name/value pairs that enable you to categorize resources. Tag names are case insensitive with max_length 512 and min_length 3. Tag values are case sensitive with max_length 256 and min_length 3.
 	Tags map[string]string `json:"tags,omitempty"`
@@ -258,9 +261,7 @@ func (m *NetworkInstConfig) ContextValidate(ctx context.Context, formats strfmt.
 }
 
 func (m *NetworkInstConfig) contextValidateDNSList(ctx context.Context, formats strfmt.Registry) error {
-
 	for i := 0; i < len(m.DNSList); i++ {
-
 		if m.DNSList[i] != nil {
 			if err := m.DNSList[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
@@ -271,14 +272,12 @@ func (m *NetworkInstConfig) contextValidateDNSList(ctx context.Context, formats 
 				return err
 			}
 		}
-
 	}
 
 	return nil
 }
 
 func (m *NetworkInstConfig) contextValidateIP(ctx context.Context, formats strfmt.Registry) error {
-
 	if m.IP != nil {
 		if err := m.IP.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
@@ -294,7 +293,6 @@ func (m *NetworkInstConfig) contextValidateIP(ctx context.Context, formats strfm
 }
 
 func (m *NetworkInstConfig) contextValidateKind(ctx context.Context, formats strfmt.Registry) error {
-
 	if m.Kind != nil {
 		if err := m.Kind.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
@@ -310,7 +308,6 @@ func (m *NetworkInstConfig) contextValidateKind(ctx context.Context, formats str
 }
 
 func (m *NetworkInstConfig) contextValidateOpaque(ctx context.Context, formats strfmt.Registry) error {
-
 	if m.Opaque != nil {
 		if err := m.Opaque.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
@@ -326,9 +323,7 @@ func (m *NetworkInstConfig) contextValidateOpaque(ctx context.Context, formats s
 }
 
 func (m *NetworkInstConfig) contextValidateStaticRoutes(ctx context.Context, formats strfmt.Registry) error {
-
 	for i := 0; i < len(m.StaticRoutes); i++ {
-
 		if m.StaticRoutes[i] != nil {
 			if err := m.StaticRoutes[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
@@ -339,14 +334,12 @@ func (m *NetworkInstConfig) contextValidateStaticRoutes(ctx context.Context, for
 				return err
 			}
 		}
-
 	}
 
 	return nil
 }
 
 func (m *NetworkInstConfig) contextValidateType(ctx context.Context, formats strfmt.Registry) error {
-
 	if m.Type != nil {
 		if err := m.Type.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {

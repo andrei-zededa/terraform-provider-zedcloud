@@ -77,6 +77,9 @@ func NetworkInstConfigModel(d *schema.ResourceData) *models.NetworkInstConfig {
 			staticRoutes = append(staticRoutes, m)
 		}
 	}
+
+	forwardLLDP, _ := d.Get("forward_lldp").(bool)
+
 	tags := map[string]string{}
 	tagsInterface, tagsIsSet := d.GetOk("tags")
 	if tagsIsSet {
@@ -105,6 +108,7 @@ func NetworkInstConfigModel(d *schema.ResourceData) *models.NetworkInstConfig {
 		PortTags:                 portTags,
 		PropagateConnectedRoutes: propagateConnectedRoutes,
 		StaticRoutes:             staticRoutes,
+		ForwardLLDP:              forwardLLDP,
 		Tags:                     tags,
 		Type:                     typeVar,
 	}
@@ -184,6 +188,9 @@ func NetworkInstConfigModelFromMap(m map[string]interface{}) *models.NetworkInst
 			staticRoutes = append(staticRoutes, m)
 		}
 	}
+
+	forwardLLDP := m["forward_lldp"].(bool)
+
 	tags := map[string]string{}
 	tagsInterface, tagsIsSet := m["tags"]
 	if tagsIsSet {
@@ -212,6 +219,7 @@ func NetworkInstConfigModelFromMap(m map[string]interface{}) *models.NetworkInst
 		PortTags:                 portTags,
 		PropagateConnectedRoutes: propagateConnectedRoutes,
 		StaticRoutes:             staticRoutes,
+		ForwardLLDP:              forwardLLDP,
 		Tags:                     tags,
 		Type:                     typeVar,
 	}
@@ -227,6 +235,7 @@ func SetNetworkInstConfigResourceData(d *schema.ResourceData, m *models.NetworkI
 	d.Set("port_tags", m.PortTags)
 	d.Set("propagate_connected_routes", m.PropagateConnectedRoutes)
 	d.Set("static_routes", SetStaticIPRouteSubResourceData(m.StaticRoutes))
+	d.Set("forwardLLDP", m.ForwardLLDP)
 	d.Set("tags", m.Tags)
 	d.Set("type", m.Type)
 }
@@ -244,6 +253,7 @@ func SetNetworkInstConfigSubResourceData(m []*models.NetworkInstConfig) (d []*ma
 			properties["port_tags"] = NetworkInstConfigModel.PortTags
 			properties["propagate_connected_routes"] = NetworkInstConfigModel.PropagateConnectedRoutes
 			properties["static_routes"] = SetStaticIPRouteSubResourceData(NetworkInstConfigModel.StaticRoutes)
+			properties["forward_lldp"] = NetworkInstConfigModel.ForwardLLDP
 			properties["tags"] = NetworkInstConfigModel.Tags
 			properties["type"] = NetworkInstConfigModel.Type
 			d = append(d, &properties)
@@ -262,7 +272,7 @@ func NetworkInstConfig() map[string]*schema.Schema {
 
 		"dns_list": {
 			Description: `List of Static DNS entries`,
-			Type:        schema.TypeList, //GoType: []*StaticDNSList
+			Type:        schema.TypeList, // GoType: []*StaticDNSList
 			Elem: &schema.Resource{
 				Schema: StaticDNSList(),
 			},
@@ -272,7 +282,7 @@ func NetworkInstConfig() map[string]*schema.Schema {
 
 		"ip": {
 			Description: `Dhcp Server Configuration`,
-			Type:        schema.TypeList, //GoType: DhcpServerConfig
+			Type:        schema.TypeList, // GoType: DhcpServerConfig
 			Elem: &schema.Resource{
 				Schema: DhcpServerConfig(),
 			},
@@ -287,7 +297,7 @@ func NetworkInstConfig() map[string]*schema.Schema {
 
 		"opaque": {
 			Description: `Service specific Config`,
-			Type:        schema.TypeList, //GoType: NetInstOpaqueConfig
+			Type:        schema.TypeList, // GoType: NetInstOpaqueConfig
 			Elem: &schema.Resource{
 				Schema: NetInstOpaqueConfigSchema(),
 			},
@@ -302,7 +312,7 @@ func NetworkInstConfig() map[string]*schema.Schema {
 
 		"port_tags": {
 			Description: `Tags are name/value pairs that enable you to categorize resources. Tag names are case insensitive with max_length 512 and min_length 3. Tag values are case sensitive with max_length 256 and min_length 3.`,
-			Type:        schema.TypeMap, //GoType: map[string]string
+			Type:        schema.TypeMap, // GoType: map[string]string
 			Elem: &schema.Schema{
 				Type: schema.TypeString,
 			},
@@ -317,7 +327,7 @@ func NetworkInstConfig() map[string]*schema.Schema {
 
 		"static_routes": {
 			Description: `List of Static IP routes`,
-			Type:        schema.TypeList, //GoType: []*StaticIPRoute
+			Type:        schema.TypeList, // GoType: []*StaticIPRoute
 			Elem: &schema.Resource{
 				Schema: StaticIPRouteSchema(),
 			},
@@ -325,9 +335,15 @@ func NetworkInstConfig() map[string]*schema.Schema {
 			Optional: true,
 		},
 
+		"forward_lldp": {
+			Description: `ForwardLLDP enables the forwarding of LLDP (link layer discovery protocol) between the ports of this network-instance.`,
+			Type:        schema.TypeBool,
+			Optional:    true,
+		},
+
 		"tags": {
 			Description: `Tags are name/value pairs that enable you to categorize resources. Tag names are case insensitive with max_length 512 and min_length 3. Tag values are case sensitive with max_length 256 and min_length 3.`,
-			Type:        schema.TypeMap, //GoType: map[string]string
+			Type:        schema.TypeMap, // GoType: map[string]string
 			Elem: &schema.Schema{
 				Type: schema.TypeString,
 			},
@@ -353,6 +369,7 @@ func GetNetworkInstConfigPropertyFields() (t []string) {
 		"port_tags",
 		"propagate_connected_routes",
 		"static_routes",
+		"forward_lldp",
 		"tags",
 		"type",
 	}

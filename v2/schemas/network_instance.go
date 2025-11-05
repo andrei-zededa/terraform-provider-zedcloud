@@ -104,6 +104,8 @@ func NetworkInstanceModel(d *schema.ResourceData) *models.NetworkInstance {
 		}
 	}
 
+	forwardLLDP, _ := d.Get("forward_lldp").(bool)
+
 	projectID, _ := d.Get("project_id").(string)
 	var revision *models.ObjectRevision // ObjectRevision
 	revisionInterface, revisionIsSet := d.GetOk("revision")
@@ -133,31 +135,32 @@ func NetworkInstanceModel(d *schema.ResourceData) *models.NetworkInstance {
 		typeVar = models.NewNetworkInstanceDhcpType(models.NetworkInstanceDhcpType(typeModel))
 	}
 	return &models.NetworkInstance{
-		ClusterID:       			clusterID,
-		Description:    			description,
-		DeviceDefault:   			deviceDefault,
-		DeviceID:        			&deviceID, // string true false false
-		Dhcp:            			dhcp,
-		DNSList:         			dNSList,
+		ClusterID:                clusterID,
+		Description:              description,
+		DeviceDefault:            deviceDefault,
+		DeviceID:                 &deviceID, // string true false false
+		Dhcp:                     dhcp,
+		DNSList:                  dNSList,
 		EdgeNodeCluster:          edgeNodeCluster,
-		ID:              			id,
-		IP:              			ip,
-		Kind:            			kind,
-		Lisp:            			lisp,
-		Mtu:            			mtu,
-		Name:            			&name, // string true false false
-		NetworkPolicyID: 			networkPolicyID,
-		Oconfig:         			oconfig,
-		Opaque:          			opaque,
-		Port:            			&port, // string true false false
-		PortTags:        			portTags,
-		ProjectID:       			projectID,
-		PropagateConnectedRoutes: 	propagateConnectedRoutes,
-		Revision:        			revision,
-		StaticRoutes:	 			staticRoutes,
-		Tags:            			tags,
-		Title:           			&title, // string true false false
-		Type:            			typeVar,
+		ID:                       id,
+		IP:                       ip,
+		Kind:                     kind,
+		Lisp:                     lisp,
+		Mtu:                      mtu,
+		Name:                     &name, // string true false false
+		NetworkPolicyID:          networkPolicyID,
+		Oconfig:                  oconfig,
+		Opaque:                   opaque,
+		Port:                     &port, // string true false false
+		PortTags:                 portTags,
+		ProjectID:                projectID,
+		PropagateConnectedRoutes: propagateConnectedRoutes,
+		Revision:                 revision,
+		StaticRoutes:             staticRoutes,
+		ForwardLLDP:              forwardLLDP,
+		Tags:                     tags,
+		Title:                    &title, // string true false false
+		Type:                     typeVar,
 	}
 }
 
@@ -262,6 +265,8 @@ func NetworkInstanceModelFromMap(m map[string]interface{}) *models.NetworkInstan
 		}
 	}
 
+	forwardLLDP := m["forward_lldp"].(bool)
+
 	projectID := m["project_id"].(string)
 	var revision *models.ObjectRevision // ObjectRevision
 	revisionInterface, revisionIsSet := m["revision"]
@@ -292,31 +297,32 @@ func NetworkInstanceModelFromMap(m map[string]interface{}) *models.NetworkInstan
 		typeVar = models.NewNetworkInstanceDhcpType(models.NetworkInstanceDhcpType(typeModel))
 	}
 	return &models.NetworkInstance{
-		ClusterID:       			clusterID,
-		Description:     			description,
-		DeviceDefault:   			deviceDefault,
-		DeviceID:        			&deviceID,
-		Dhcp:            			dhcp,
-		DNSList:         			dNSList,
+		ClusterID:                clusterID,
+		Description:              description,
+		DeviceDefault:            deviceDefault,
+		DeviceID:                 &deviceID,
+		Dhcp:                     dhcp,
+		DNSList:                  dNSList,
 		EdgeNodeCluster:          edgeNodeCluster,
-		ID:              			id,
-		IP:              			ip,
-		Kind:            			kind,
-		Lisp:            			lisp,
-		Mtu: 		   	 			mtu,
-		Name:            			&name,
-		NetworkPolicyID: 			networkPolicyID,
-		Oconfig:         			oconfig,
-		Opaque:          			opaque,
-		Port:            			&port,
-		PortTags:        			portTags,
-		ProjectID:       			projectID,
-		PropagateConnectedRoutes: 	propagateConnectedRoutes,
-		Revision:       		 	revision,
-		StaticRoutes:            	staticRoutes,
-		Tags:            			tags,
-		Title:        			   	&title,
-		Type:          				typeVar,
+		ID:                       id,
+		IP:                       ip,
+		Kind:                     kind,
+		Lisp:                     lisp,
+		Mtu:                      mtu,
+		Name:                     &name,
+		NetworkPolicyID:          networkPolicyID,
+		Oconfig:                  oconfig,
+		Opaque:                   opaque,
+		Port:                     &port,
+		PortTags:                 portTags,
+		ProjectID:                projectID,
+		PropagateConnectedRoutes: propagateConnectedRoutes,
+		Revision:                 revision,
+		StaticRoutes:             staticRoutes,
+		ForwardLLDP:              forwardLLDP,
+		Tags:                     tags,
+		Title:                    &title,
+		Type:                     typeVar,
 	}
 }
 
@@ -343,6 +349,7 @@ func SetNetworkInstanceResourceData(d *schema.ResourceData, m *models.NetworkIns
 	d.Set("propagate_connected_routes", m.PropagateConnectedRoutes)
 	d.Set("revision", SetObjectRevisionSubResourceData([]*models.ObjectRevision{m.Revision}))
 	d.Set("static_routes", SetStaticIPRouteSubResourceData(m.StaticRoutes))
+	d.Set("forward_lldp", m.ForwardLLDP)
 	d.Set("tags", m.Tags)
 	d.Set("title", m.Title)
 	d.Set("type", m.Type)
@@ -374,6 +381,7 @@ func SetNetworkInstanceSubResourceData(m []*models.NetworkInstance) (d []*map[st
 			properties["propagate_connected_routes"] = NetInstConfigModel.PropagateConnectedRoutes
 			properties["revision"] = SetObjectRevisionSubResourceData([]*models.ObjectRevision{NetInstConfigModel.Revision})
 			properties["static_routes"] = SetStaticIPRouteSubResourceData(NetInstConfigModel.StaticRoutes)
+			properties["forward_lldp"] = NetInstConfigModel.ForwardLLDP
 			properties["tags"] = NetInstConfigModel.Tags
 			properties["title"] = NetInstConfigModel.Title
 			properties["type"] = NetInstConfigModel.Type
@@ -404,9 +412,9 @@ func NetworkInstance() map[string]*schema.Schema {
 		},
 
 		"device_id": {
-			Description: 	`ID of the device on which network instance is created`,
-			Type:        	schema.TypeString,
-			Optional:    	true,
+			Description: `ID of the device on which network instance is created`,
+			Type:        schema.TypeString,
+			Optional:    true,
 		},
 
 		"dhcp": {
@@ -417,7 +425,7 @@ func NetworkInstance() map[string]*schema.Schema {
 
 		"dns_list": {
 			Description: `List of Static DNS entries`,
-			Type:        schema.TypeList, //GoType: []*StaticDNSList
+			Type:        schema.TypeList, // GoType: []*StaticDNSList
 			Elem: &schema.Resource{
 				Schema: StaticDNSList(),
 			},
@@ -428,11 +436,11 @@ func NetworkInstance() map[string]*schema.Schema {
 
 		"edge_node_cluster": {
 			Description: `Edge Node Cluster`,
-			Type:        schema.TypeList, //GoType: NetInstEdgeNodeCluster
+			Type:        schema.TypeList, // GoType: NetInstEdgeNodeCluster
 			Elem: &schema.Resource{
 				Schema: NetInstEdgeNodeClusterSchema(),
 			},
-			Optional: true,
+			Optional:         true,
 			DiffSuppressFunc: diffSupressMapInterfaceNonConfigChanges("edge_node_cluster", "id"),
 		},
 
@@ -444,7 +452,7 @@ func NetworkInstance() map[string]*schema.Schema {
 
 		"ip": {
 			Description: `DHCP Server Configuration`,
-			Type:        schema.TypeList, //GoType: DhcpServerConfig
+			Type:        schema.TypeList, // GoType: DhcpServerConfig
 			Elem: &schema.Resource{
 				Schema: DHCPServer(),
 			},
@@ -467,7 +475,7 @@ NETWORK_INSTANCE_KIND_HONEYPOT`,
 
 		"lisp": {
 			Description: `Lisp Config : read only for now. Deprecated.`,
-			Type:        schema.TypeList, //GoType: LispConfig
+			Type:        schema.TypeList, // GoType: LispConfig
 			Elem: &schema.Resource{
 				Schema: Lisp(),
 			},
@@ -501,7 +509,7 @@ NETWORK_INSTANCE_KIND_HONEYPOT`,
 
 		"opaque": {
 			Description: `Service specific Config`,
-			Type:        schema.TypeList, //GoType: NetInstOpaqueConfig
+			Type:        schema.TypeList, // GoType: NetInstOpaqueConfig
 			Elem: &schema.Resource{
 				Schema: NetworkInstanceOpaque(),
 			},
@@ -516,7 +524,7 @@ NETWORK_INSTANCE_KIND_HONEYPOT`,
 
 		"port_tags": {
 			Description: `Tags are name/value pairs that enable you to categorize resources. Tag names are case insensitive with max_length 512 and min_length 3. Tag values are case sensitive with max_length 256 and min_length 3.`,
-			Type:        schema.TypeMap, //GoType: map[string]string
+			Type:        schema.TypeMap, // GoType: map[string]string
 			Elem: &schema.Schema{
 				Type: schema.TypeString,
 			},
@@ -538,7 +546,7 @@ NETWORK_INSTANCE_KIND_HONEYPOT`,
 
 		"revision": {
 			Description: `system defined info for the object`,
-			Type:        schema.TypeList, //GoType: ObjectRevision
+			Type:        schema.TypeList, // GoType: ObjectRevision
 			Elem: &schema.Resource{
 				Schema: ObjectRevision(),
 			},
@@ -547,7 +555,7 @@ NETWORK_INSTANCE_KIND_HONEYPOT`,
 
 		"static_routes": {
 			Description: `List of Static IP routes`,
-			Type:        schema.TypeList, //GoType: []*StaticIPRoute
+			Type:        schema.TypeList, // GoType: []*StaticIPRoute
 			Elem: &schema.Resource{
 				Schema: StaticIPRouteSchema(),
 			},
@@ -555,9 +563,15 @@ NETWORK_INSTANCE_KIND_HONEYPOT`,
 			Optional: true,
 		},
 
+		"forward_lldp": {
+			Description: `ForwardLLDP enables the forwarding of LLDP (link layer discovery protocol) between the ports of this network-instance.`,
+			Type:        schema.TypeBool,
+			Optional:    true,
+		},
+
 		"tags": {
 			Description: `Tags are name/value pairs that enable you to categorize resources. Tag names are case insensitive with max_length 512 and min_length 3. Tag values are case sensitive with max_length 256 and min_length 3.`,
-			Type:        schema.TypeMap, //GoType: map[string]string
+			Type:        schema.TypeMap, // GoType: map[string]string
 			Elem: &schema.Schema{
 				Type: schema.TypeString,
 			},
@@ -609,6 +623,7 @@ func GetNetworkInstancePropertyFields() (t []string) {
 		"propagate_connected_routes",
 		"revision",
 		"static_routes",
+		"forward_lldp",
 		"tags",
 		"title",
 		"type",

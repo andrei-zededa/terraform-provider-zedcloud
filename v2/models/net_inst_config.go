@@ -22,7 +22,6 @@ import (
 //
 // swagger:model NetworkInstance
 type NetworkInstance struct {
-
 	// id of the Cluster in which the network instance is configured
 	// Max Length: 256
 	// Min Length: 3
@@ -109,6 +108,10 @@ type NetworkInstance struct {
 
 	// List of Static IP routes
 	StaticRoutes []*StaticIPRoute `json:"staticRoutes"`
+
+	// ForwardLLDP enables the forwarding of LLDP (link layer discovery protocol)
+	// between the ports of this network-instance.
+	ForwardLLDP bool `json:"forwardLldp"`
 
 	// Tags are name/value pairs that enable you to categorize resources. Tag names are case insensitive with max_length 512 and min_length 3. Tag values are case sensitive with max_length 256 and min_length 3.
 	Tags map[string]string `json:"tags,omitempty"`
@@ -231,7 +234,6 @@ func (m *NetworkInstance) validateDescription(formats strfmt.Registry) error {
 }
 
 func (m *NetworkInstance) validateDeviceID(formats strfmt.Registry) error {
-
 	if err := validate.Required("deviceId", "body", m.DeviceID); err != nil {
 		return err
 	}
@@ -316,7 +318,6 @@ func (m *NetworkInstance) validateIP(formats strfmt.Registry) error {
 }
 
 func (m *NetworkInstance) validateKind(formats strfmt.Registry) error {
-
 	if err := validate.Required("kind", "body", m.Kind); err != nil {
 		return err
 	}
@@ -359,7 +360,6 @@ func (m *NetworkInstance) validateLisp(formats strfmt.Registry) error {
 }
 
 func (m *NetworkInstance) validateName(formats strfmt.Registry) error {
-
 	if err := validate.Required("name", "body", m.Name); err != nil {
 		return err
 	}
@@ -399,7 +399,6 @@ func (m *NetworkInstance) validateOpaque(formats strfmt.Registry) error {
 }
 
 func (m *NetworkInstance) validatePort(formats strfmt.Registry) error {
-
 	if err := validate.Required("port", "body", m.Port); err != nil {
 		return err
 	}
@@ -453,7 +452,6 @@ func (m *NetworkInstance) validateStaticRoutes(formats strfmt.Registry) error {
 }
 
 func (m *NetworkInstance) validateTitle(formats strfmt.Registry) error {
-
 	if err := validate.Required("title", "body", m.Title); err != nil {
 		return err
 	}
@@ -543,9 +541,7 @@ func (m *NetworkInstance) ContextValidate(ctx context.Context, formats strfmt.Re
 }
 
 func (m *NetworkInstance) contextValidateDNSList(ctx context.Context, formats strfmt.Registry) error {
-
 	for i := 0; i < len(m.DNSList); i++ {
-
 		if m.DNSList[i] != nil {
 			if err := m.DNSList[i].ContextValidate(ctx, formats); err != nil {
 				if ve, ok := err.(*errors.Validation); ok {
@@ -556,14 +552,12 @@ func (m *NetworkInstance) contextValidateDNSList(ctx context.Context, formats st
 				return err
 			}
 		}
-
 	}
 
 	return nil
 }
 
 func (m *NetworkInstance) contextValidateEdgeNodeCluster(ctx context.Context, formats strfmt.Registry) error {
-
 	if m.EdgeNodeCluster != nil {
 
 		if swag.IsZero(m.EdgeNodeCluster) { // not required
@@ -584,7 +578,6 @@ func (m *NetworkInstance) contextValidateEdgeNodeCluster(ctx context.Context, fo
 }
 
 func (m *NetworkInstance) contextValidateID(ctx context.Context, formats strfmt.Registry) error {
-
 	if err := validate.ReadOnly(ctx, "id", "body", string(m.ID)); err != nil {
 		return err
 	}
@@ -593,7 +586,6 @@ func (m *NetworkInstance) contextValidateID(ctx context.Context, formats strfmt.
 }
 
 func (m *NetworkInstance) contextValidateIP(ctx context.Context, formats strfmt.Registry) error {
-
 	if m.IP != nil {
 		if err := m.IP.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
@@ -609,7 +601,6 @@ func (m *NetworkInstance) contextValidateIP(ctx context.Context, formats strfmt.
 }
 
 func (m *NetworkInstance) contextValidateKind(ctx context.Context, formats strfmt.Registry) error {
-
 	if m.Kind != nil {
 		if err := m.Kind.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
@@ -625,7 +616,6 @@ func (m *NetworkInstance) contextValidateKind(ctx context.Context, formats strfm
 }
 
 func (m *NetworkInstance) contextValidateLisp(ctx context.Context, formats strfmt.Registry) error {
-
 	if m.Lisp != nil {
 		if err := m.Lisp.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
@@ -641,7 +631,6 @@ func (m *NetworkInstance) contextValidateLisp(ctx context.Context, formats strfm
 }
 
 func (m *NetworkInstance) contextValidateOpaque(ctx context.Context, formats strfmt.Registry) error {
-
 	if m.Opaque != nil {
 		if err := m.Opaque.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
@@ -657,7 +646,6 @@ func (m *NetworkInstance) contextValidateOpaque(ctx context.Context, formats str
 }
 
 func (m *NetworkInstance) contextValidateRevision(ctx context.Context, formats strfmt.Registry) error {
-
 	if m.Revision != nil {
 		if err := m.Revision.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {
@@ -673,9 +661,7 @@ func (m *NetworkInstance) contextValidateRevision(ctx context.Context, formats s
 }
 
 func (m *NetworkInstance) contextValidateStaticRoutes(ctx context.Context, formats strfmt.Registry) error {
-
 	for i := 0; i < len(m.StaticRoutes); i++ {
-
 		if m.StaticRoutes[i] != nil {
 
 			if swag.IsZero(m.StaticRoutes[i]) { // not required
@@ -691,14 +677,12 @@ func (m *NetworkInstance) contextValidateStaticRoutes(ctx context.Context, forma
 				return err
 			}
 		}
-
 	}
 
 	return nil
 }
 
 func (m *NetworkInstance) contextValidateType(ctx context.Context, formats strfmt.Registry) error {
-
 	if m.Type != nil {
 		if err := m.Type.ContextValidate(ctx, formats); err != nil {
 			if ve, ok := err.(*errors.Validation); ok {

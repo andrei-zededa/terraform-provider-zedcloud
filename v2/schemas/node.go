@@ -654,7 +654,7 @@ func Node() map[string]*schema.Schema {
 
 		"base_image": {
 			Description: `base images`,
-			Type:        schema.TypeList, //GoType: []*BaseOSImage
+			Type:        schema.TypeList, // GoType: []*BaseOSImage
 			Elem: &schema.Resource{
 				Schema: BaseOSImage(),
 			},
@@ -700,7 +700,7 @@ func Node() map[string]*schema.Schema {
 
 		"config_item": {
 			Description: `ED configurations`,
-			Type:        schema.TypeList, //GoType: []*EDConfigItem
+			Type:        schema.TypeList, // GoType: []*EDConfigItem
 			Elem: &schema.Resource{
 				Schema: EDConfigItem(),
 			},
@@ -723,7 +723,7 @@ func Node() map[string]*schema.Schema {
 
 		"debug_knob": {
 			Description: `debug knob details for the device`,
-			Type:        schema.TypeList, //GoType: DebugKnobDetail
+			Type:        schema.TypeList, // GoType: DebugKnobDetail
 			Elem: &schema.Resource{
 				Schema: DebugKnobDetail(),
 			},
@@ -733,7 +733,7 @@ func Node() map[string]*schema.Schema {
 
 		"default_net_inst": {
 			Description: `default network instance details`,
-			Type:        schema.TypeList, //GoType: NetInstConfig
+			Type:        schema.TypeList, // GoType: NetInstConfig
 			Elem: &schema.Resource{
 				Schema: NetworkInstance(),
 			},
@@ -760,7 +760,7 @@ func Node() map[string]*schema.Schema {
 
 		"dev_location": {
 			Description: `User specified geo location`,
-			Type:        schema.TypeList, //GoType: GeoLocation
+			Type:        schema.TypeList, // GoType: GeoLocation
 			Elem: &schema.Resource{
 				Schema: GeoLocationSchema(),
 			},
@@ -769,7 +769,7 @@ func Node() map[string]*schema.Schema {
 
 		"dlisp": {
 			Description: `device Lisp`,
-			Type:        schema.TypeList, //GoType: DeviceLisp
+			Type:        schema.TypeList, // GoType: DeviceLisp
 			Elem: &schema.Resource{
 				Schema: DeviceLisp(),
 			},
@@ -778,7 +778,7 @@ func Node() map[string]*schema.Schema {
 
 		"edge_node_cluster": {
 			Description: `Edge Node Cluster Configuration`,
-			Type:        schema.TypeList, //GoType: EdgeNodeClusterConfig
+			Type:        schema.TypeList, // GoType: EdgeNodeClusterConfig
 			Elem: &schema.Resource{
 				Schema: EdgeNodeClusterConfigSchema(),
 			},
@@ -793,7 +793,7 @@ func Node() map[string]*schema.Schema {
 
 		"edgeviewconfig": {
 			Description: `edgeview configuration for device`,
-			Type:        schema.TypeList, //GoType: EdgeviewCfg
+			Type:        schema.TypeList, // GoType: EdgeviewCfg
 			Elem: &schema.Resource{
 				Schema: EdgeView(),
 			},
@@ -816,11 +816,16 @@ func Node() map[string]*schema.Schema {
 			Description: `Device identity`,
 			Type:        schema.TypeString,
 			Optional:    true,
+			Computed:    true,
+			DiffSuppressFunc: func(k, oldValue, newValue string, d *schema.ResourceData) bool {
+				// Suppress the diff if the old value was empty.
+				return oldValue == ""
+			},
 		},
 
 		"interfaces": {
 			Description:      `System Interface list`,
-			Type:             schema.TypeList, //GoType: []*SysInterface
+			Type:             schema.TypeList, // GoType: []*SysInterface
 			Elem:             systemInterfaceElem(),
 			Required:         true,
 			DiffSuppressFunc: diffSuppressSystemInterfaceListOrder("interfaces"),
@@ -911,7 +916,7 @@ func Node() map[string]*schema.Schema {
 
 		"revision": {
 			Description: `Object revision details`,
-			Type:        schema.TypeList, //GoType: ObjectRevision
+			Type:        schema.TypeList, // GoType: ObjectRevision
 			Elem: &schema.Resource{
 				Schema: ObjectRevision(),
 			},
@@ -927,7 +932,7 @@ func Node() map[string]*schema.Schema {
 
 		"site_pictures": {
 			Description: `Site captured pictures`,
-			Type:        schema.TypeSet, //GoType: []string
+			Type:        schema.TypeSet, // GoType: []string
 			Elem: &schema.Schema{
 				Type: schema.TypeString,
 			},
@@ -942,7 +947,7 @@ func Node() map[string]*schema.Schema {
 
 		"tags": {
 			Description: `Tags are name/value pairs that enable you to categorize resources. Tag names are case insensitive with max_length 512 and min_length 3. Tag values are case sensitive with max_length 256 and min_length 3.`,
-			Type:        schema.TypeMap, //GoType: map[string]string
+			Type:        schema.TypeMap, // GoType: map[string]string
 			Elem: &schema.Schema{
 				Type: schema.TypeString,
 			},
@@ -976,7 +981,7 @@ func Node() map[string]*schema.Schema {
 
 		"vlan_adapters": {
 			Description: `A list of VLAN sub-interfaces configured for EVE management traffic and for local network instances`,
-			Type:        schema.TypeList, //GoType: []*VlanAdapter
+			Type:        schema.TypeList, // GoType: []*VlanAdapter
 			Elem: &schema.Resource{
 				Schema: VlanAdapterSchema(),
 			},

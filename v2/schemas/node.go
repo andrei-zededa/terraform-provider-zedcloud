@@ -696,6 +696,7 @@ func Node() map[string]*schema.Schema {
 			Description: `Cluster Interface`,
 			Type:        schema.TypeString,
 			Optional:    true,
+			Computed:    true,
 		},
 
 		"config_item": {
@@ -783,6 +784,7 @@ func Node() map[string]*schema.Schema {
 				Schema: EdgeNodeClusterConfigSchema(),
 			},
 			Optional: true,
+			Computed: true,
 		},
 
 		"edgeview_allow": {

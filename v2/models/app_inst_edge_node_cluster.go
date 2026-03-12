@@ -18,7 +18,6 @@ import (
 //
 // swagger:model AppInstEdgeNodeCluster
 type AppInstEdgeNodeCluster struct {
-
 	// Id of the designated node
 	// Pattern: [0-9A-Za-z-]+
 	DesignatedNodeID string `json:"designatedNodeID,omitempty"`
@@ -26,6 +25,8 @@ type AppInstEdgeNodeCluster struct {
 	// Id of the edge node cluster
 	// Pattern: [0-9A-Za-z-]+
 	ID string `json:"id,omitempty"`
+
+	EnableAppPinning bool `json:"enableAppPinning"`
 }
 
 // Validate validates this app inst edge node cluster

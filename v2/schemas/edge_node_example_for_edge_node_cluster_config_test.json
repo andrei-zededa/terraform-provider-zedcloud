@@ -1,0 +1,305 @@
+{
+  "id": "66ad0680-c589-4671-95ef-42feae0d88e1",
+  "name": "OS-Shell-PoC-B-wittness.S2542K5211060001",
+  "title": "OS-Shell-PoC-B-wittness.S2542K5211060001",
+  "description": "Shell Vessel cluster tie-breaker Edge-Box",
+  "revision": {
+    "prev": "",
+    "curr": "62",
+    "createdAt": "2026-01-14T22:27:22.948850Z",
+    "createdBy": "sven.ehreke@o-s.de",
+    "updatedAt": "2026-04-10T09:00:08.041572Z",
+    "updatedBy": "alexander.voigt@o-s.de"
+  },
+  "tags": {
+    "Environment": "Integration",
+    "location": "Berlin",
+    "node-type": "Cluster-Node",
+    "project": "SHELL-Vessel",
+    "tie-breaker": "true"
+  },
+  "utype": "AMD64",
+  "projectId": "c8969736-f155-4d0b-8263-63cf807c6f9e",
+  "serialno": "Default string",
+  "location": "",
+  "cpu": 0,
+  "thread": 0,
+  "memory": 0,
+  "storage": 0,
+  "onboarding": {
+    "pemCert": "",
+    "pemKey": ""
+  },
+  "identity": "FWqgRK5boSCZgg7Ui3RfE8s8LUse6LwboayDhh3OJ5CocULhE0h0TfmExWbsNSIxNK6/8Q9roXmWlPiRB+7TMcGIMp27L8HYibhEtvoN5HJCo4cpgF+1Rc7/1yEyzZcAKTTknL1+P4Vh37MUGjKGIOHqrumJTi+/weJ3Euqpm9MSwYs2EyC1JMrroCfKYrhSJML8XqAIidBd817E9ejaCS0n8mDZyO6Gq1wAjcf1KBFbRl4rjxjskt5z65l0Jf0QR3DE7guJmh5hq1eupDJn/76DvUv3LWJt050DaEdNOSAeqNgySxwcfzhU3WaPUqrYQCr+FiCw6jPudcI87C93IRXx4Gm88lcajz6g8a9Hb6fG2crVcoCDQ1sDbsT0YClGLmHq3kjxo0CemSWHWDDOZhndW+FxOlj7wKltjh0FXjeLrPV0rZOxC6uF+qrtw2UyaIit+lZ36lOvOxhRVSfoC/Q2SMgjz++9jajGyRFWD+EcYgjz3Qf8N9BNdsE=",
+  "obkey": "fbbee9ea-8ed0-455f-845e-694c7def2264:41267796-e603-431f-8762-d8a2e831b690",
+  "token": "",
+  "clientIp": "",
+  "dlisp": null,
+  "clusterID": "",
+  "adminState": "ADMIN_STATE_REGISTERED",
+  "resetCounter": 1004,
+  "resetTime": "",
+  "baseImage": [
+    {
+      "uuid": "",
+      "version": "",
+      "imageName": "0.0.0-etcd-snapshot-support-7f7ecc5f-k-amd64",
+      "activate": true,
+      "imvolId": "13e34da3-4758-4f08-82a7-ddfaf16e2779"
+    }
+  ],
+  "modelId": "8fc171cb-2fb3-44cc-ac81-51270e6e3e5c",
+  "configItem": [
+    {
+      "key": "network.download.max.cost",
+      "valueType": "",
+      "boolValue": false,
+      "uint32Value": 0,
+      "uint64Value": "0",
+      "floatValue": 0,
+      "stringValue": "255"
+    },
+    {
+      "key": "process.cloud-init.multipart",
+      "valueType": "",
+      "boolValue": false,
+      "uint32Value": 0,
+      "uint64Value": "0",
+      "floatValue": 0,
+      "stringValue": "true"
+    },
+    {
+      "key": "debug.enable.ssh",
+      "valueType": "",
+      "boolValue": false,
+      "uint32Value": 0,
+      "uint64Value": "0",
+      "floatValue": 0,
+      "stringValue": "ssh-rsa 49EIcoYl7wOthns5UwJ7B2fPiVhdfq6xc0V0+usDhbjIsznXddx9xIn3RKbWXy6ixIdtVtR6k85e5c7CcVUF0/9YDsTiKhrUYzpAN/giPgt1nEdty8H9cT3O2RwcJ+GUokRtumVIlydi7qMNoHaizblIz47W+ipn4p5EcL//BvClBJeesiBOUB0pTuAJelgHMRBVDY4WinMS8c2blowC/4HzIyoF1pk9ELlBttwUtOxzHqlGdam3ttygsBKAafG3keqO6yLyl4d+ked9w/QeTpn0ytaZ2blEO95F4c4W8FEPohr0Mfbz7jRMGZvdN+6W5qHYgBa57J4TaH66LZSOtN1PpErf48QTDpevdgZL user@example-host.local\nssh-ed25519 0uegG3FA2jyaDYKQV6Cf6aphT6WbDVo0nDizljJVKW8+ftPeOyfiu5nVCUtmSeUFgm4z Example Edge SSH key"
+    }
+  ],
+  "deprecated": "",
+  "vlanAdapters": [
+    {
+      "logicalLabel": "eth0.v13",
+      "interfaceName": "",
+      "lowerLayerName": "eth0",
+      "vlanId": 13,
+      "interface": {
+        "netname": "default_network_dhcp_client",
+        "adapterSpecificNet": null,
+        "ipaddr": "",
+        "intfname": "eth0.v13",
+        "intfUsage": "ADAPTER_USAGE_MANAGEMENT",
+        "tags": {},
+        "macaddr": "",
+        "cost": 100,
+        "netid": "9b8f96de-8cfa-4217-b856-6fb51f248971",
+        "sharedLabels": [],
+        "netDhcp": "NETWORK_DHCP_TYPE_UNSPECIFIED",
+        "ztype": "",
+        "allowLocalModifications": false
+      }
+    },
+    {
+      "logicalLabel": "eth0.v99",
+      "interfaceName": "",
+      "lowerLayerName": "eth0",
+      "vlanId": 99,
+      "interface": {
+        "netname": "no_vessel_Int",
+        "adapterSpecificNet": null,
+        "ipaddr": "192.168.40.152",
+        "intfname": "eth0.v99",
+        "intfUsage": "ADAPTER_USAGE_MANAGEMENT",
+        "tags": {},
+        "macaddr": "",
+        "cost": 0,
+        "netid": "c07d991c-55ff-4d4e-b1d4-b72bcd9d8e59",
+        "sharedLabels": [],
+        "netDhcp": "NETWORK_DHCP_TYPE_UNSPECIFIED",
+        "ztype": "",
+        "allowLocalModifications": false
+      }
+    }
+  ],
+  "interfaces": [
+    {
+      "netname": "default_network_dhcp_client",
+      "adapterSpecificNet": null,
+      "ipaddr": "",
+      "intfname": "eth0",
+      "intfUsage": "ADAPTER_USAGE_MANAGEMENT",
+      "tags": {},
+      "macaddr": "",
+      "cost": 0,
+      "netid": "9b8f96de-8cfa-4217-b856-6fb51f248971",
+      "sharedLabels": [],
+      "netDhcp": "NETWORK_DHCP_TYPE_CLIENT",
+      "ztype": "IO_TYPE_ETH",
+      "allowLocalModifications": false
+    },
+    {
+      "netname": "no_dhcp_no_ip",
+      "adapterSpecificNet": null,
+      "ipaddr": "",
+      "intfname": "eth1",
+      "intfUsage": "ADAPTER_USAGE_APP_SHARED",
+      "tags": {},
+      "macaddr": "",
+      "cost": 0,
+      "netid": "7ea7766a-8cbe-4ef6-8e20-344f8ec7e4fc",
+      "sharedLabels": [],
+      "netDhcp": "NETWORK_DHCP_TYPE_PASSTHROUGH",
+      "ztype": "IO_TYPE_ETH",
+      "allowLocalModifications": false
+    },
+    {
+      "netname": "",
+      "adapterSpecificNet": null,
+      "ipaddr": "",
+      "intfname": "Audio",
+      "intfUsage": "ADAPTER_USAGE_UNSPECIFIED",
+      "tags": {},
+      "macaddr": "",
+      "cost": 0,
+      "netid": "9b8f96de-8cfa-4217-b856-6fb51f248971",
+      "sharedLabels": [],
+      "netDhcp": "NETWORK_DHCP_TYPE_UNSPECIFIED",
+      "ztype": "IO_TYPE_AUDIO",
+      "allowLocalModifications": false
+    },
+    {
+      "netname": "",
+      "adapterSpecificNet": null,
+      "ipaddr": "",
+      "intfname": "USB",
+      "intfUsage": "ADAPTER_USAGE_UNSPECIFIED",
+      "tags": {},
+      "macaddr": "",
+      "cost": 0,
+      "netid": "9b8f96de-8cfa-4217-b856-6fb51f248971",
+      "sharedLabels": [],
+      "netDhcp": "NETWORK_DHCP_TYPE_UNSPECIFIED",
+      "ztype": "IO_TYPE_USB_CONTROLLER",
+      "allowLocalModifications": false
+    },
+    {
+      "netname": "",
+      "adapterSpecificNet": null,
+      "ipaddr": "",
+      "intfname": "VGA",
+      "intfUsage": "ADAPTER_USAGE_UNSPECIFIED",
+      "tags": {},
+      "macaddr": "",
+      "cost": 0,
+      "netid": "9b8f96de-8cfa-4217-b856-6fb51f248971",
+      "sharedLabels": [],
+      "netDhcp": "NETWORK_DHCP_TYPE_UNSPECIFIED",
+      "ztype": "IO_TYPE_HDMI",
+      "allowLocalModifications": false
+    },
+    {
+      "netname": "",
+      "adapterSpecificNet": null,
+      "ipaddr": "",
+      "intfname": "COM1",
+      "intfUsage": "ADAPTER_USAGE_UNSPECIFIED",
+      "tags": {},
+      "macaddr": "",
+      "cost": 0,
+      "netid": "9b8f96de-8cfa-4217-b856-6fb51f248971",
+      "sharedLabels": [],
+      "netDhcp": "NETWORK_DHCP_TYPE_UNSPECIFIED",
+      "ztype": "IO_TYPE_COM",
+      "allowLocalModifications": false
+    },
+    {
+      "netname": "",
+      "adapterSpecificNet": null,
+      "ipaddr": "",
+      "intfname": "COM2",
+      "intfUsage": "ADAPTER_USAGE_UNSPECIFIED",
+      "tags": {},
+      "macaddr": "",
+      "cost": 0,
+      "netid": "7ea7766a-8cbe-4ef6-8e20-344f8ec7e4fc",
+      "sharedLabels": [],
+      "netDhcp": "NETWORK_DHCP_TYPE_UNSPECIFIED",
+      "ztype": "IO_TYPE_COM",
+      "allowLocalModifications": false
+    }
+  ],
+  "devLocation": null,
+  "sitePictures": [],
+  "assetId": "",
+  "baseOsRetryCounter": 0,
+  "baseOsRetryTime": "",
+  "debugKnob": {
+    "id": "66ad0680-c589-4671-95ef-42feae0d88e1",
+    "debugKnob": false,
+    "expiry": "0",
+    "expired": true
+  },
+  "defaultNetInst": null,
+  "preparePowerOffCounter": 1,
+  "preparePowerOffTime": "2026-01-15 09:17:12.518774997 +0000 UTC",
+  "edgeviewconfig": {
+    "jwtInfo": {
+      "dispUrl": "zedcloud.zededa.net/api/v1/edge-view",
+      "allowSec": 2592000,
+      "expireSec": "1778169007",
+      "numInst": 5,
+      "encrypt": false,
+      "authen": "EvAuth_TYPE_UNSPECIFIED"
+    },
+    "token": "uN-bFeBOjekRaebXZ9s0C18YbIbmk9aen0WtBEL2.Q18rl4vxOLGp-yVMF0aDnbtdhCBo11GXzLduMDuXpEmHm_ECYhr212nvjl7O9gQuc9zQAxLqh2BZ9ClnTv_H7SaqWfUJ441StDaxl9FGVkxZPcL2msGJC4F0yajvd2t8X3X1sc3lL2YlnkVg6D-ojzBQY408Z_FY.q1eZbKrgbFTzvEUYBK165toLOLCSc2c2xI7PRE8Dx5mKcJB7NNOvpyqKPa-GM8fm0UwYjcvBWqkmY68MjHxtRA",
+    "devPolicy": {
+      "allowDev": true
+    },
+    "appPolicy": {
+      "allowApp": true
+    },
+    "extPolicy": {
+      "allowExt": false
+    },
+    "generationId": 1,
+    "requireControllerAuthen": false
+  },
+  "generateSoftSerial": false,
+  "deploymentTag": "",
+  "localOperatorConsoleURL": "",
+  "configLock": "DEVICE_CONFIG_LOCK_DISABLED",
+  "edgeviewAllow": false,
+  "clusterInterface": "eth1",
+  "edgeNodeCluster": {
+    "id": "35ca7d70-a4cd-4717-b141-de2f49941a50",
+    "name": "010-Cluster",
+    "tags": {},
+    "projectId": "c8969736-f155-4d0b-8263-63cf807c6f9e",
+    "clusterPrefix": "10.244.244.3/28",
+    "seedNodeId": "5752de88-76d0-4565-a064-d2145980d921",
+    "seedNodeIp": "10.244.244.2",
+    "token": "TZKvn24DZgAGOqMlzM+bARPglcvoaNtDG7G4Zt3bjhM=",
+    "isMaster": true,
+    "manifest": "",
+    "tieBreakerNodeId": "66ad0680-c589-4671-95ef-42feae0d88e1",
+    "clusterType": 0
+  },
+  "baseOsForceUpgrade": false,
+  "project": {
+    "projectId": "c8969736-f155-4d0b-8263-63cf807c6f9e",
+    "projectName": "Vessel_010_Int",
+    "type": "TAG_TYPE_PROJECT"
+  },
+  "model": {
+    "modelId": "8fc171cb-2fb3-44cc-ac81-51270e6e3e5c",
+    "modelName": "DSP-521",
+    "brandId": "15dcfd56-7597-4f7c-aeaa-2796bf463dcc",
+    "brandName": "Axiomtek"
+  },
+  "edgeSyncConfig": {
+    "edgeSyncUrl": "",
+    "datastoreId": []
+  }
+}

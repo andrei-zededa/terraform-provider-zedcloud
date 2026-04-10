@@ -10,7 +10,23 @@ func EdgeNodeClusterConfigModel(d *schema.ResourceData) *models.EdgeNodeClusterC
 	clusterPrefix, _ := d.Get("cluster_prefix").(string)
 	id, _ := d.Get("id").(string)
 	isMaster, _ := d.Get("is_master").(bool)
-	manifest, _ := d.Get("manifest").(strfmt.Base64)
+
+	manifest := strfmt.Base64{}
+	switch v := d.Get("manifest").(type) {
+	case strfmt.Base64:
+		manifest = v
+	case string:
+		if err := manifest.UnmarshalText([]byte(v)); err != nil {
+			// TODO: Handle the error somehow !
+		}
+	case []byte:
+		if err := manifest.UnmarshalText(v); err != nil {
+			// TODO: Handle the error somehow !
+		}
+	default:
+		// TODO: Handle other types !
+	}
+
 	name, _ := d.Get("name").(string)
 	projectID, _ := d.Get("project_id").(string)
 	seedNodeID, _ := d.Get("seed_node_id").(string)
@@ -48,7 +64,23 @@ func EdgeNodeClusterConfigModelFromMap(m map[string]interface{}) *models.EdgeNod
 	clusterPrefix := m["cluster_prefix"].(string)
 	id := m["id"].(string)
 	isMaster := m["is_master"].(bool)
-	manifest := m["manifest"].(strfmt.Base64)
+
+	manifest := strfmt.Base64{}
+	switch v := m["manifest"].(type) {
+	case strfmt.Base64:
+		manifest = v
+	case string:
+		if err := manifest.UnmarshalText([]byte(v)); err != nil {
+			// TODO: Handle the error somehow !
+		}
+	case []byte:
+		if err := manifest.UnmarshalText(v); err != nil {
+			// TODO: Handle the error somehow !
+		}
+	default:
+		// TODO: Handle other types !
+	}
+
 	name := m["name"].(string)
 	projectID := m["project_id"].(string)
 	seedNodeID := m["seed_node_id"].(string)
@@ -169,7 +201,7 @@ func EdgeNodeClusterConfigSchema() map[string]*schema.Schema {
 
 		"tags": {
 			Description: `Tags are name/value pairs that enable you to categorize resources. Tag names are case insensitive with max_length 512 and min_length 3. Tag values are case sensitive with max_length 256 and min_length 3.`,
-			Type:        schema.TypeMap, //GoType: map[string]string
+			Type:        schema.TypeMap, // GoType: map[string]string
 			Elem: &schema.Schema{
 				Type: schema.TypeString,
 			},
